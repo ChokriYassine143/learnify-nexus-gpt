@@ -1,17 +1,39 @@
 
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Book, ChevronDown, LogIn, Menu, Search } from "lucide-react";
+import { Book, ChevronDown, LogIn, LogOut, Menu, Search, Settings, User } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Header: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
+  const { user, isAuthenticated, logout } = useAuth();
+  const navigate = useNavigate();
+  
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
+
+  const getDashboardLink = () => {
+    if (!user) return "/dashboard";
+    
+    switch(user.role) {
+      case "admin":
+        return "/dashboard/admin";
+      case "teacher":
+        return "/dashboard/teacher";
+      default:
+        return "/dashboard/student";
+    }
+  };
   
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-white">
@@ -69,16 +91,57 @@ const Header: React.FC = () => {
             />
           </div>
           
-          <Button variant="outline" asChild>
-            <Link to="/login">
-              <LogIn className="mr-2 h-4 w-4" />
-              Login
-            </Link>
-          </Button>
-          
-          <Button asChild>
-            <Link to="/register">Register</Link>
-          </Button>
+          {isAuthenticated ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" className="flex items-center gap-2">
+                  <User className="h-4 w-4" />
+                  <span>{user?.name}</span>
+                  <ChevronDown className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem asChild>
+                  <Link to={getDashboardLink()}>Dashboard</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/profile">My Profile</Link>
+                </DropdownMenuItem>
+                {user?.role === "teacher" && (
+                  <DropdownMenuItem asChild>
+                    <Link to="/dashboard/teacher">My Courses</Link>
+                  </DropdownMenuItem>
+                )}
+                {user?.role === "admin" && (
+                  <DropdownMenuItem asChild>
+                    <Link to="/dashboard/admin">Admin Panel</Link>
+                  </DropdownMenuItem>
+                )}
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link to="/settings">
+                    <Settings className="mr-2 h-4 w-4" /> Settings
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={handleLogout}>
+                  <LogOut className="mr-2 h-4 w-4" /> Logout
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <>
+              <Button variant="outline" asChild>
+                <Link to="/login">
+                  <LogIn className="mr-2 h-4 w-4" />
+                  Login
+                </Link>
+              </Button>
+              
+              <Button asChild>
+                <Link to="/register">Register</Link>
+              </Button>
+            </>
+          )}
           
           <Button
             variant="ghost"
@@ -123,6 +186,25 @@ const Header: React.FC = () => {
             <Link to="/about" className="nav-link">
               About Us
             </Link>
+            
+            {isAuthenticated && (
+              <>
+                <div className="border-t my-2 pt-2">
+                  <Link to={getDashboardLink()} className="nav-link font-medium">
+                    Dashboard
+                  </Link>
+                  <Link to="/profile" className="nav-link">
+                    My Profile
+                  </Link>
+                  <button 
+                    onClick={handleLogout}
+                    className="flex w-full items-center text-left px-2 py-1 text-red-600"
+                  >
+                    <LogOut className="mr-2 h-4 w-4" /> Logout
+                  </button>
+                </div>
+              </>
+            )}
           </nav>
         </div>
       )}

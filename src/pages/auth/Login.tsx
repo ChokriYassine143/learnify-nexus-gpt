@@ -1,6 +1,6 @@
 
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -8,8 +8,38 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Book, LogIn } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Login: React.FC = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState("");
+  
+  const { login } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+  
+  // Get the redirect URL from the query string if it exists
+  const params = new URLSearchParams(location.search);
+  const redirectUrl = params.get("redirect") || "/dashboard";
+  
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    setIsSubmitting(true);
+    
+    try {
+      await login(email, password);
+      // After successful login, redirect the user
+      navigate(redirectUrl);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to login");
+      setIsSubmitting(false);
+    }
+  };
+  
   return (
     <>
       <Header />
@@ -25,13 +55,21 @@ const Login: React.FC = () => {
             </p>
           </div>
           
-          <div className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {error && (
+              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+                {error}
+              </div>
+            )}
+            
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
                 placeholder="email@example.com"
                 type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 required
               />
             </div>
@@ -49,19 +87,26 @@ const Login: React.FC = () => {
                 id="password"
                 type="password"
                 placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 required
               />
             </div>
             
             <div className="flex items-center space-x-2">
-              <Checkbox id="remember" />
+              <Checkbox 
+                id="remember" 
+                checked={rememberMe}
+                onCheckedChange={(checked) => setRememberMe(checked === true)}
+              />
               <Label htmlFor="remember" className="text-sm font-normal">Remember me</Label>
             </div>
             
-            <Button type="submit" className="w-full">
-              <LogIn className="mr-2 h-4 w-4" /> Login
+            <Button type="submit" className="w-full" disabled={isSubmitting}>
+              <LogIn className="mr-2 h-4 w-4" /> 
+              {isSubmitting ? "Logging in..." : "Login"}
             </Button>
-          </div>
+          </form>
           
           <div className="text-center">
             <p className="text-sm text-gray-600">
@@ -70,6 +115,43 @@ const Login: React.FC = () => {
                 Register
               </Link>
             </p>
+          </div>
+          
+          {/* Quick login options for demo purposes */}
+          <div className="border-t pt-4">
+            <p className="text-sm text-gray-600 text-center mb-2">Demo Accounts</p>
+            <div className="grid grid-cols-3 gap-2">
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => {
+                  setEmail("student@example.com");
+                  setPassword("password123");
+                }}
+              >
+                Student
+              </Button>
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => {
+                  setEmail("teacher@example.com");
+                  setPassword("password123");
+                }}
+              >
+                Teacher
+              </Button>
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => {
+                  setEmail("admin@example.com");
+                  setPassword("password123");
+                }}
+              >
+                Admin
+              </Button>
+            </div>
           </div>
         </div>
       </main>
