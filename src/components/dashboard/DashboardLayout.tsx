@@ -11,23 +11,35 @@ interface DashboardLayoutProps {
   children: React.ReactNode;
 }
 
+interface SidebarItem {
+  name: string;
+  path: string;
+  roles: Array<"admin" | "teacher" | "student">;
+}
+
+interface SidebarGroup {
+  sprint: string;
+  title: string;
+  items: SidebarItem[];
+  icon: React.ReactNode;
+}
+
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   const [collapsed, setCollapsed] = useState(false);
   const { user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   
-  const isAdmin = user?.role === "admin";
-  const isTeacher = user?.role === "teacher";
+  const userRole = user?.role || "student";
   
-  const sprintItems = [
+  const sprintItems: SidebarGroup[] = [
     {
       sprint: "Sprint 1",
       title: "Gestion des Utilisateurs",
       items: [
-        { name: "Authentification", path: "/dashboard/auth" },
-        { name: "Gérer Profil", path: "/dashboard/profile" },
-        ...(isAdmin ? [{ name: "Gérer Utilisateurs", path: "/dashboard/admin" }] : []),
+        { name: "Authentification", path: "/dashboard/auth", roles: ["student", "teacher", "admin"] },
+        { name: "Gérer Profil", path: "/dashboard/profile", roles: ["student", "teacher", "admin"] },
+        { name: "Gérer Utilisateurs", path: "/dashboard/admin", roles: ["admin"] },
       ],
       icon: <Users className="h-5 w-5" />
     },
@@ -35,9 +47,9 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
       sprint: "Sprint 2",
       title: "Gestion des Cours",
       items: [
-        ...(isTeacher || isAdmin ? [{ name: "Gérer les Cours", path: "/dashboard/courses/manage" }] : []),
-        { name: "Gérer les Ressources", path: "/dashboard/resources" },
-        { name: "Accéder aux Cours", path: "/courses" },
+        { name: "Gérer les Cours", path: "/dashboard/courses/manage", roles: ["teacher", "admin"] },
+        { name: "Gérer les Ressources", path: "/dashboard/resources", roles: ["teacher", "admin"] },
+        { name: "Accéder aux Cours", path: "/courses", roles: ["student", "teacher", "admin"] },
       ],
       icon: <BookOpen className="h-5 w-5" />
     },
@@ -45,10 +57,10 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
       sprint: "Sprint 3",
       title: "Quiz et Paiements",
       items: [
-        ...(isTeacher || isAdmin ? [{ name: "Gérer Quiz/Devoirs", path: "/dashboard/quizzes/manage" }] : []),
-        { name: "Passer Quiz/Devoirs", path: "/dashboard/quizzes" },
-        { name: "Payer les Frais", path: "/dashboard/payments" },
-        ...(isAdmin ? [{ name: "Surveiller Paiements", path: "/dashboard/payments/monitor" }] : []),
+        { name: "Gérer Quiz/Devoirs", path: "/dashboard/quizzes/manage", roles: ["teacher", "admin"] },
+        { name: "Passer Quiz/Devoirs", path: "/dashboard/quizzes", roles: ["student"] },
+        { name: "Payer les Frais", path: "/dashboard/payments", roles: ["student"] },
+        { name: "Surveiller Paiements", path: "/dashboard/payments/monitor", roles: ["admin"] },
       ],
       icon: <FileText className="h-5 w-5" />
     },
@@ -56,8 +68,8 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
       sprint: "Sprint 4",
       title: "Forum et Chatbot",
       items: [
-        { name: "Participer au Forum", path: "/forum" },
-        { name: "Interagir avec le Chatbot", path: "/dashboard/chatbot" },
+        { name: "Participer au Forum", path: "/forum", roles: ["student", "teacher", "admin"] },
+        { name: "Interagir avec le Chatbot", path: "/dashboard/chatbot", roles: ["student", "teacher", "admin"] },
       ],
       icon: <MessageSquare className="h-5 w-5" />
     }
@@ -66,6 +78,12 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   const isActive = (path: string) => {
     return location.pathname === path;
   };
+
+  // Filter sidebar groups to only show items relevant to the current user's role
+  const filteredSidebarItems = sprintItems.map(group => ({
+    ...group,
+    items: group.items.filter(item => item.roles.includes(userRole as "admin" | "teacher" | "student"))
+  })).filter(group => group.items.length > 0); // Only show groups that have at least one item
 
   return (
     <div className="container py-12">
@@ -92,7 +110,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
           <Separator />
           
           <div className="p-2">
-            {sprintItems.map((sprintGroup, idx) => (
+            {filteredSidebarItems.map((sprintGroup, idx) => (
               <div key={idx} className={cn("mb-4", collapsed && "flex flex-col items-center")}>
                 {!collapsed && <p className="text-xs font-bold uppercase tracking-wider text-gray-500 px-3 mb-1">
                   {sprintGroup.sprint}

@@ -47,24 +47,50 @@ const App = () => (
             {/* Protected Dashboard Routes */}
             <Route path="/dashboard" element={<ProtectedRoute />}>
               <Route index element={<Navigate to="/dashboard/student" replace />} />
-              <Route path="admin" element={<AdminDashboard />} />
-              <Route path="teacher" element={<TeacherDashboard />} />
-              <Route path="student" element={<StudentDashboard />} />
               
-              {/* Sprint 1 Routes */}
+              {/* Role-specific dashboard pages */}
+              <Route path="admin" element={<ProtectedRoute allowedRoles={["admin"]} />}>
+                <Route index element={<AdminDashboard />} />
+              </Route>
+              
+              <Route path="teacher" element={<ProtectedRoute allowedRoles={["teacher"]} />}>
+                <Route index element={<TeacherDashboard />} />
+              </Route>
+              
+              <Route path="student" element={<ProtectedRoute allowedRoles={["student"]} />}>
+                <Route index element={<StudentDashboard />} />
+              </Route>
+              
+              {/* Sprint 1 Routes - available to all authenticated users */}
               <Route path="profile" element={<ProfilePage />} />
               
               {/* Sprint 2 Routes */}
-              <Route path="courses/manage" element={<ManageCoursesPage />} />
-              <Route path="resources" element={<ResourcesPage />} />
+              <Route path="courses/manage" element={<ProtectedRoute allowedRoles={["admin", "teacher"]} />}>
+                <Route index element={<ManageCoursesPage />} />
+              </Route>
+              
+              <Route path="resources" element={<ProtectedRoute allowedRoles={["admin", "teacher"]} />}>
+                <Route index element={<ResourcesPage />} />
+              </Route>
               
               {/* Sprint 3 Routes */}
-              <Route path="quizzes" element={<QuizzesPage />} />
-              <Route path="quizzes/manage" element={<ManageQuizzesPage />} />
-              <Route path="payments" element={<PaymentsPage />} />
-              <Route path="payments/monitor" element={<MonitorPaymentsPage />} />
+              <Route path="quizzes" element={<ProtectedRoute allowedRoles={["student"]} />}>
+                <Route index element={<QuizzesPage />} />
+              </Route>
               
-              {/* Sprint 4 Routes */}
+              <Route path="quizzes/manage" element={<ProtectedRoute allowedRoles={["admin", "teacher"]} />}>
+                <Route index element={<ManageQuizzesPage />} />
+              </Route>
+              
+              <Route path="payments" element={<ProtectedRoute allowedRoles={["student"]} />}>
+                <Route index element={<PaymentsPage />} />
+              </Route>
+              
+              <Route path="payments/monitor" element={<ProtectedRoute allowedRoles={["admin"]} />}>
+                <Route index element={<MonitorPaymentsPage />} />
+              </Route>
+              
+              {/* Sprint 4 Routes - Chatbot available to all roles */}
               <Route path="chatbot" element={<ChatbotPage />} />
             </Route>
             
