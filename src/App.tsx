@@ -17,6 +17,16 @@ import TeacherDashboard from "./pages/dashboard/TeacherDashboard";
 import StudentDashboard from "./pages/dashboard/StudentDashboard";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 
+// Placeholder pages for sprint routes
+import ProfilePage from "./pages/dashboard/ProfilePage";
+import ManageCoursesPage from "./pages/dashboard/courses/ManageCoursesPage";
+import ResourcesPage from "./pages/dashboard/resources/ResourcesPage";
+import QuizzesPage from "./pages/dashboard/quizzes/QuizzesPage";
+import ManageQuizzesPage from "./pages/dashboard/quizzes/ManageQuizzesPage";
+import PaymentsPage from "./pages/dashboard/payments/PaymentsPage";
+import MonitorPaymentsPage from "./pages/dashboard/payments/MonitorPaymentsPage";
+import ChatbotPage from "./pages/dashboard/ChatbotPage";
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -40,6 +50,22 @@ const App = () => (
               <Route path="admin" element={<AdminDashboard />} />
               <Route path="teacher" element={<TeacherDashboard />} />
               <Route path="student" element={<StudentDashboard />} />
+              
+              {/* Sprint 1 Routes */}
+              <Route path="profile" element={<ProfilePage />} />
+              
+              {/* Sprint 2 Routes */}
+              <Route path="courses/manage" element={<ManageCoursesPage />} />
+              <Route path="resources" element={<ResourcesPage />} />
+              
+              {/* Sprint 3 Routes */}
+              <Route path="quizzes" element={<QuizzesPage />} />
+              <Route path="quizzes/manage" element={<ManageQuizzesPage />} />
+              <Route path="payments" element={<PaymentsPage />} />
+              <Route path="payments/monitor" element={<MonitorPaymentsPage />} />
+              
+              {/* Sprint 4 Routes */}
+              <Route path="chatbot" element={<ChatbotPage />} />
             </Route>
             
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
