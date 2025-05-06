@@ -38,7 +38,7 @@ const ManageCoursesPage: React.FC = () => {
           </CardHeader>
           <CardContent>
             <p className="text-center py-8 text-gray-500">
-              Cette section sera complétée dans le sprint 2
+              Aucun cours trouvé. Commencez par créer un nouveau cours.
             </p>
           </CardContent>
         </Card>

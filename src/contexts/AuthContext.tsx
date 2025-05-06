@@ -1,4 +1,3 @@
-
 import React, { createContext, useState, useContext, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -7,6 +6,7 @@ interface User {
   name: string;
   email: string;
   role: "student" | "teacher" | "admin";
+  hasPurchasedCourses?: boolean; // Add this field
 }
 
 interface AuthContextType {

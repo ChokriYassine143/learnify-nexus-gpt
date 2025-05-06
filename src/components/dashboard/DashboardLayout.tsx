@@ -15,10 +15,10 @@ interface SidebarItem {
   name: string;
   path: string;
   roles: Array<"admin" | "teacher" | "student">;
+  condition?: () => boolean;
 }
 
 interface SidebarGroup {
-  sprint: string;
   title: string;
   items: SidebarItem[];
   icon: React.ReactNode;
@@ -32,10 +32,16 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   
   const userRole = user?.role || "student";
   
-  const sprintItems: SidebarGroup[] = [
+  // Simulate a condition where a student has purchased a course
+  // In a real app, this would check if the user has any purchased courses
+  const hasPurchasedCourses = () => {
+    // This is a placeholder. In a real app, you'd check the user's purchased courses
+    return user?.hasPurchasedCourses || false;
+  };
+  
+  const navigationItems: SidebarGroup[] = [
     {
-      sprint: "Sprint 1",
-      title: "Gestion des Utilisateurs",
+      title: "Utilisateurs",
       items: [
         { name: "Authentification", path: "/dashboard/auth", roles: ["student", "teacher", "admin"] },
         { name: "Gérer Profil", path: "/dashboard/profile", roles: ["student", "teacher", "admin"] },
@@ -44,8 +50,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
       icon: <Users className="h-5 w-5" />
     },
     {
-      sprint: "Sprint 2",
-      title: "Gestion des Cours",
+      title: "Cours",
       items: [
         { name: "Gérer les Cours", path: "/dashboard/courses/manage", roles: ["teacher", "admin"] },
         { name: "Gérer les Ressources", path: "/dashboard/resources", roles: ["teacher", "admin"] },
@@ -54,19 +59,22 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
       icon: <BookOpen className="h-5 w-5" />
     },
     {
-      sprint: "Sprint 3",
       title: "Quiz et Paiements",
       items: [
         { name: "Gérer Quiz/Devoirs", path: "/dashboard/quizzes/manage", roles: ["teacher", "admin"] },
         { name: "Passer Quiz/Devoirs", path: "/dashboard/quizzes", roles: ["student"] },
-        { name: "Payer les Frais", path: "/dashboard/payments", roles: ["student"] },
+        { 
+          name: "Payer les Frais", 
+          path: "/dashboard/payments", 
+          roles: ["student"],
+          condition: hasPurchasedCourses
+        },
         { name: "Surveiller Paiements", path: "/dashboard/payments/monitor", roles: ["admin"] },
       ],
       icon: <FileText className="h-5 w-5" />
     },
     {
-      sprint: "Sprint 4",
-      title: "Forum et Chatbot",
+      title: "Forums et Assistance",
       items: [
         { name: "Participer au Forum", path: "/forum", roles: ["student", "teacher", "admin"] },
         { name: "Interagir avec le Chatbot", path: "/dashboard/chatbot", roles: ["student", "teacher", "admin"] },
@@ -80,9 +88,14 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   };
 
   // Filter sidebar groups to only show items relevant to the current user's role
-  const filteredSidebarItems = sprintItems.map(group => ({
+  // Also apply any conditional logic for showing/hiding menu items
+  const filteredSidebarItems = navigationItems.map(group => ({
     ...group,
-    items: group.items.filter(item => item.roles.includes(userRole as "admin" | "teacher" | "student"))
+    items: group.items.filter(item => {
+      const hasRole = item.roles.includes(userRole as "admin" | "teacher" | "student");
+      const passesCondition = item.condition !== undefined ? item.condition() : true;
+      return hasRole && passesCondition;
+    })
   })).filter(group => group.items.length > 0); // Only show groups that have at least one item
 
   return (
@@ -110,19 +123,19 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
           <Separator />
           
           <div className="p-2">
-            {filteredSidebarItems.map((sprintGroup, idx) => (
+            {filteredSidebarItems.map((navGroup, idx) => (
               <div key={idx} className={cn("mb-4", collapsed && "flex flex-col items-center")}>
                 {!collapsed && <p className="text-xs font-bold uppercase tracking-wider text-gray-500 px-3 mb-1">
-                  {sprintGroup.sprint}
+                  {navGroup.title}
                 </p>}
                 {collapsed && (
                   <div className="flex items-center justify-center p-2 mb-1">
-                    {sprintGroup.icon}
+                    {navGroup.icon}
                   </div>
                 )}
                 {!collapsed && (
                   <div className="space-y-1">
-                    {sprintGroup.items.map((item, itemIdx) => (
+                    {navGroup.items.map((item, itemIdx) => (
                       <Button
                         key={itemIdx}
                         variant={isActive(item.path) ? "secondary" : "ghost"}
@@ -137,7 +150,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
                     ))}
                   </div>
                 )}
-                {collapsed && sprintGroup.items.map((item, itemIdx) => (
+                {collapsed && navGroup.items.map((item, itemIdx) => (
                   <Button
                     key={itemIdx}
                     variant={isActive(item.path) ? "secondary" : "ghost"}
