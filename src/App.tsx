@@ -20,6 +20,9 @@ import ProtectedRoute from "./components/auth/ProtectedRoute";
 // New pages
 import AboutUs from "./pages/about/AboutUs";
 import ContactUs from "./pages/contact/ContactUs";
+import CourseLearningPage from "./pages/courses/CourseLearningPage";
+import CreateForumPost from "./pages/forum/CreateForumPost";
+import ForumTopicPage from "./pages/forum/ForumTopicPage";
 
 // Placeholder pages for sprint routes
 import ProfilePage from "./pages/dashboard/ProfilePage";
@@ -46,7 +49,10 @@ const App = () => (
             <Route path="/register" element={<Register />} />
             <Route path="/courses" element={<CoursesList />} />
             <Route path="/course/:id" element={<CourseDetails />} />
+            <Route path="/course/:courseId/learn/:lessonId?" element={<CourseLearningPage />} />
             <Route path="/forum" element={<ForumIndex />} />
+            <Route path="/forum/new" element={<CreateForumPost />} />
+            <Route path="/forum/:topicId" element={<ForumTopicPage />} />
             <Route path="/about" element={<AboutUs />} />
             <Route path="/contact" element={<ContactUs />} />
             
