@@ -2,6 +2,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import "./styles/dashboard.css";
 
 @layer base {
   :root {
@@ -95,10 +96,10 @@
   }
   
   .nav-link {
-    @apply flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-primary-100;
+    @apply flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-learnup-blue3;
   }
   
   .nav-link.active {
-    @apply bg-primary-100 text-primary-700;
+    @apply bg-learnup-blue3 text-learnup-blue1;
   }
 }

@@ -1,7 +1,7 @@
 
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { ChevronLeft, ChevronRight, Users, BookOpen, FileText, MessageSquare } from "lucide-react";
+import { ChevronLeft, ChevronRight, Users, BookOpen, FileText, MessageSquare, GraduationCap } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -104,64 +104,74 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
         {/* Sidebar */}
         <aside 
           className={cn(
-            "bg-white border rounded-lg shadow-sm transition-all duration-300 h-fit sticky top-24",
+            "bg-white border rounded-lg shadow-md transition-all duration-300 h-fit sticky top-24",
             collapsed ? "w-16" : "w-64"
           )}
         >
-          <div className="p-4 flex justify-between items-center">
-            {!collapsed && <h3 className="font-semibold">Dashboard</h3>}
+          <div className={cn(
+            "bg-gradient-to-r from-learnup-blue1 to-learnup-blue2 text-white rounded-t-lg p-4",
+            "flex justify-between items-center"
+          )}>
+            {!collapsed && (
+              <div className="flex items-center">
+                <img
+                  src="/lovable-uploads/b14b8995-4cec-4fca-af8c-857f1e9e3699.png"
+                  alt="LearnUp Logo"
+                  className="w-8 h-8 mr-2"
+                />
+                <h3 className="font-bold">LearnUp</h3>
+              </div>
+            )}
+            {collapsed && (
+              <img
+                src="/lovable-uploads/b14b8995-4cec-4fca-af8c-857f1e9e3699.png"
+                alt="LearnUp Logo"
+                className="w-8 h-8 mx-auto"
+              />
+            )}
             <Button 
               variant="ghost" 
               size="sm" 
-              className="ml-auto"
+              className="text-white hover:bg-white/20"
               onClick={() => setCollapsed(!collapsed)}
             >
               {collapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
             </Button>
           </div>
           
-          <Separator />
-          
-          <div className="p-2">
+          <div className="p-3">
             {filteredSidebarItems.map((navGroup, idx) => (
-              <div key={idx} className={cn("mb-4", collapsed && "flex flex-col items-center")}>
-                {!collapsed && <p className="text-xs font-bold uppercase tracking-wider text-gray-500 px-3 mb-1">
-                  {navGroup.title}
-                </p>}
+              <div key={idx} className={cn("mb-5", collapsed && "flex flex-col items-center")}>
+                {!collapsed && (
+                  <div className="flex items-center mb-2 text-xs font-bold uppercase tracking-wider text-learnup-blue4 px-3">
+                    {navGroup.icon}
+                    <span className="ml-2">{navGroup.title}</span>
+                  </div>
+                )}
                 {collapsed && (
-                  <div className="flex items-center justify-center p-2 mb-1">
+                  <div className="flex items-center justify-center p-2 mb-2 text-learnup-blue4">
                     {navGroup.icon}
                   </div>
                 )}
-                {!collapsed && (
-                  <div className="space-y-1">
-                    {navGroup.items.map((item, itemIdx) => (
-                      <Button
-                        key={itemIdx}
-                        variant={isActive(item.path) ? "secondary" : "ghost"}
-                        className={cn(
-                          "w-full justify-start text-left",
-                          isActive(item.path) ? "bg-secondary/50" : ""
-                        )}
-                        onClick={() => navigate(item.path)}
-                      >
-                        {item.name}
-                      </Button>
-                    ))}
-                  </div>
-                )}
-                {collapsed && navGroup.items.map((item, itemIdx) => (
-                  <Button
-                    key={itemIdx}
-                    variant={isActive(item.path) ? "secondary" : "ghost"}
-                    size="sm"
-                    className="w-10 h-10 p-0 mb-1"
-                    title={item.name}
-                    onClick={() => navigate(item.path)}
-                  >
-                    {item.name.charAt(0)}
-                  </Button>
-                ))}
+                <div className={cn("space-y-1.5", collapsed && "flex flex-col items-center")}>
+                  {navGroup.items.map((item, itemIdx) => (
+                    <Button
+                      key={itemIdx}
+                      variant={isActive(item.path) ? "default" : "ghost"}
+                      className={cn(
+                        "w-full justify-start text-sm transition-colors",
+                        isActive(item.path) 
+                          ? "bg-gradient-to-r from-learnup-blue1 to-learnup-blue2 text-white hover:from-learnup-blue4 hover:to-learnup-blue1" 
+                          : "hover:bg-learnup-blue3/20 text-gray-700",
+                        collapsed && "w-10 h-10 p-0 justify-center"
+                      )}
+                      onClick={() => navigate(item.path)}
+                      title={collapsed ? item.name : undefined}
+                    >
+                      {collapsed ? item.name.charAt(0) : item.name}
+                    </Button>
+                  ))}
+                </div>
               </div>
             ))}
           </div>
