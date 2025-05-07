@@ -17,6 +17,10 @@ import TeacherDashboard from "./pages/dashboard/TeacherDashboard";
 import StudentDashboard from "./pages/dashboard/StudentDashboard";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 
+// New pages
+import AboutUs from "./pages/about/AboutUs";
+import ContactUs from "./pages/contact/ContactUs";
+
 // Placeholder pages for sprint routes
 import ProfilePage from "./pages/dashboard/ProfilePage";
 import ManageCoursesPage from "./pages/dashboard/courses/ManageCoursesPage";
@@ -43,6 +47,8 @@ const App = () => (
             <Route path="/courses" element={<CoursesList />} />
             <Route path="/course/:id" element={<CourseDetails />} />
             <Route path="/forum" element={<ForumIndex />} />
+            <Route path="/about" element={<AboutUs />} />
+            <Route path="/contact" element={<ContactUs />} />
             
             {/* Protected Dashboard Routes */}
             <Route path="/dashboard" element={<ProtectedRoute />}>

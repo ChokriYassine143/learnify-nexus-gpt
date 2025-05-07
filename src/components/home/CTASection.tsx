@@ -16,10 +16,20 @@ const CTASection: React.FC = () => {
             Get unlimited access to our diverse catalog of expert-led courses.
           </p>
           <div className="mt-10 flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-6 justify-center">
-            <Button size="lg" variant="default" className="bg-white text-learnup-blue1 hover:bg-gray-100 shadow-lg transform hover:-translate-y-1 transition-all font-semibold px-8" asChild>
+            <Button 
+              size="lg" 
+              variant="default" 
+              className="bg-white text-learnup-blue1 hover:bg-gray-100 hover:scale-105 shadow-lg transform transition-transform duration-300 ease-in-out font-semibold px-8" 
+              asChild
+            >
               <Link to="/register">Sign Up Now</Link>
             </Button>
-            <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white/10 shadow-lg transform hover:-translate-y-1 transition-all font-semibold px-8" asChild>
+            <Button 
+              size="lg" 
+              variant="outline" 
+              className="border-2 border-white text-white hover:bg-white/10 hover:scale-105 shadow-lg transform transition-transform duration-300 ease-in-out font-semibold px-8" 
+              asChild
+            >
               <Link to="/courses">Explore Courses</Link>
             </Button>
           </div>

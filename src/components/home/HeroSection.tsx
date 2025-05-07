@@ -25,14 +25,14 @@ const HeroSection: React.FC = () => {
           </p>
           
           <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:justify-center">
-            <Button size="lg" asChild className="text-base bg-white text-learnup-blue1 hover:bg-gray-100 shadow-lg transform hover:-translate-y-1 transition-all">
+            <Button size="lg" asChild className="text-base bg-white text-learnup-blue1 hover:bg-gray-100 hover:scale-105 shadow-lg transform transition-transform duration-300 ease-in-out">
               <Link to="/courses">Explore Courses</Link>
             </Button>
             <Button
               size="lg"
               asChild
               variant="outline"
-              className="text-base border-2 border-white text-white hover:bg-white/20 shadow-lg transform hover:-translate-y-1 transition-all"
+              className="text-base border-2 border-white text-white hover:bg-white/20 hover:scale-105 shadow-lg transform transition-transform duration-300 ease-in-out"
             >
               <Link to="/register">Join For Free</Link>
             </Button>
