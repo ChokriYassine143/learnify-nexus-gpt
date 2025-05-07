@@ -1,6 +1,6 @@
 
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -16,6 +16,7 @@ const Header: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
   const { user, isAuthenticated, logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   
   const handleLogout = () => {
     logout();
@@ -43,7 +44,7 @@ const Header: React.FC = () => {
             <img
               src="/lovable-uploads/b14b8995-4cec-4fca-af8c-857f1e9e3699.png"
               alt="LearnUp Logo"
-              className="h-8 w-auto"
+              className="h-9 w-auto"
             />
             <span className="text-xl font-bold bg-gradient-to-r from-learnup-blue1 to-learnup-blue2 bg-clip-text text-transparent">LearnUp</span>
           </Link>
@@ -51,35 +52,35 @@ const Header: React.FC = () => {
           <nav className="hidden md:flex items-center gap-6">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="flex items-center gap-1">
+                <Button variant="ghost" className="flex items-center gap-1 nav-link-main">
                   Categories <ChevronDown className="h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem>
-                  <Link to="/courses/web-development">Web Development</Link>
+              <DropdownMenuContent className="dropdown-content">
+                <DropdownMenuItem className="dropdown-item">
+                  <Link to="/courses/web-development" className="w-full">Web Development</Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Link to="/courses/data-science">Data Science</Link>
+                <DropdownMenuItem className="dropdown-item">
+                  <Link to="/courses/data-science" className="w-full">Data Science</Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Link to="/courses/mobile-apps">Mobile Apps</Link>
+                <DropdownMenuItem className="dropdown-item">
+                  <Link to="/courses/mobile-apps" className="w-full">Mobile Apps</Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Link to="/courses/graphic-design">Graphic Design</Link>
+                <DropdownMenuItem className="dropdown-item">
+                  <Link to="/courses/graphic-design" className="w-full">Graphic Design</Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
             
-            <Link to="/courses" className="nav-link">
+            <Link to="/courses" className="nav-link-main">
               All Courses
             </Link>
             
-            <Link to="/forum" className="nav-link">
+            <Link to="/forum" className="nav-link-main">
               Forum
             </Link>
             
-            <Link to="/about" className="nav-link">
+            <Link to="/about" className="nav-link-main">
               About Us
             </Link>
           </nav>
@@ -91,7 +92,7 @@ const Header: React.FC = () => {
             <input
               type="search"
               placeholder="Search courses..."
-              className="h-10 w-64 rounded-md border border-gray-200 bg-gray-50 pl-8 text-sm"
+              className="h-10 w-64 rounded-md border border-gray-200 bg-gray-50 pl-8 text-sm focus:border-learnup-blue2 focus:ring-1 focus:ring-learnup-blue3 transition-all"
             />
           </div>
           
@@ -104,30 +105,30 @@ const Header: React.FC = () => {
                   <ChevronDown className="h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem asChild>
-                  <Link to={getDashboardLink()}>Dashboard</Link>
+              <DropdownMenuContent align="end" className="dropdown-content">
+                <DropdownMenuItem asChild className="dropdown-item">
+                  <Link to={getDashboardLink()} className="w-full">Dashboard</Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/profile">My Profile</Link>
+                <DropdownMenuItem asChild className="dropdown-item">
+                  <Link to="/profile" className="w-full">My Profile</Link>
                 </DropdownMenuItem>
                 {user?.role === "teacher" && (
-                  <DropdownMenuItem asChild>
-                    <Link to="/dashboard/courses/manage">My Courses</Link>
+                  <DropdownMenuItem asChild className="dropdown-item">
+                    <Link to="/dashboard/courses/manage" className="w-full">My Courses</Link>
                   </DropdownMenuItem>
                 )}
                 {user?.role === "admin" && (
-                  <DropdownMenuItem asChild>
-                    <Link to="/dashboard/admin">Admin Panel</Link>
+                  <DropdownMenuItem asChild className="dropdown-item">
+                    <Link to="/dashboard/admin" className="w-full">Admin Panel</Link>
                   </DropdownMenuItem>
                 )}
                 <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                  <Link to="/settings">
+                <DropdownMenuItem asChild className="dropdown-item">
+                  <Link to="/settings" className="w-full">
                     <Settings className="mr-2 h-4 w-4" /> Settings
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={handleLogout}>
+                <DropdownMenuItem onClick={handleLogout} className="dropdown-item text-red-600 hover:text-red-700">
                   <LogOut className="mr-2 h-4 w-4" /> Logout
                 </DropdownMenuItem>
               </DropdownMenuContent>

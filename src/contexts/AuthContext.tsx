@@ -1,3 +1,4 @@
+
 import React, { createContext, useState, useContext, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -6,14 +7,14 @@ interface User {
   name: string;
   email: string;
   role: "student" | "teacher" | "admin";
-  hasPurchasedCourses?: boolean; // Add this field
+  hasPurchasedCourses?: boolean; 
 }
 
 interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  login: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<User>;
   logout: () => void;
   register: (name: string, email: string, password: string) => Promise<void>;
 }
@@ -87,6 +88,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         title: "Logged in successfully",
         description: `Welcome back, ${loggedInUser.name}!`,
       });
+      
+      return loggedInUser;
       
     } catch (error) {
       toast({

@@ -31,9 +31,26 @@ const Login: React.FC = () => {
     setIsSubmitting(true);
     
     try {
-      await login(email, password);
-      // After successful login, redirect the user
-      navigate(redirectUrl);
+      const userData = await login(email, password);
+      // After successful login, redirect based on user role
+      let targetUrl = redirectUrl;
+      
+      // Only override if the redirect is the generic dashboard
+      if (redirectUrl === "/dashboard" && userData?.role) {
+        switch(userData.role) {
+          case "admin":
+            targetUrl = "/dashboard/admin";
+            break;
+          case "teacher":
+            targetUrl = "/dashboard/teacher";
+            break;
+          case "student":
+            targetUrl = "/dashboard/student";
+            break;
+        }
+      }
+      
+      navigate(targetUrl);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to login");
       setIsSubmitting(false);

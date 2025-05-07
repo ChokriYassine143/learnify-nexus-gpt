@@ -9,6 +9,13 @@ const HeroSection: React.FC = () => {
     <section className="hero-section relative">
       <div className="container relative z-10 py-20 text-white">
         <div className="mx-auto max-w-2xl text-center">
+          <div className="flex justify-center items-center mb-6">
+            <img
+              src="/lovable-uploads/b14b8995-4cec-4fca-af8c-857f1e9e3699.png"
+              alt="LearnUp Logo"
+              className="h-16 w-auto drop-shadow-lg"
+            />
+          </div>
           <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
             Learn Without Limits
           </h1>
@@ -18,14 +25,14 @@ const HeroSection: React.FC = () => {
           </p>
           
           <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:justify-center">
-            <Button size="lg" asChild className="text-base">
+            <Button size="lg" asChild className="text-base bg-white text-learnup-blue1 hover:bg-gray-100 shadow-lg transform hover:-translate-y-1 transition-all">
               <Link to="/courses">Explore Courses</Link>
             </Button>
             <Button
               size="lg"
               asChild
-              variant="secondary"
-              className="text-base"
+              variant="outline"
+              className="text-base border-2 border-white text-white hover:bg-white/20 shadow-lg transform hover:-translate-y-1 transition-all"
             >
               <Link to="/register">Join For Free</Link>
             </Button>
@@ -38,7 +45,7 @@ const HeroSection: React.FC = () => {
               </div>
               <input
                 type="search"
-                className="block w-full rounded-md border border-white/20 bg-white py-3 pl-10 pr-4 text-sm text-gray-900 placeholder-gray-500 shadow-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary"
+                className="block w-full rounded-md border border-white/20 bg-white py-3 pl-10 pr-4 text-sm text-gray-900 placeholder-gray-500 shadow-sm focus:border-learnup-blue3 focus:outline-none focus:ring-2 focus:ring-learnup-blue2"
                 placeholder="What do you want to learn today?"
               />
             </div>
