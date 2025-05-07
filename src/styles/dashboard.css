@@ -22,20 +22,34 @@
   border-radius: 12px;
   overflow: hidden;
   transition: all 0.3s ease;
+  border: 1px solid rgba(60, 153, 220, 0.1);
 }
 
 .dashboard-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 10px 25px rgba(60, 153, 220, 0.2);
+  border-color: rgba(60, 153, 220, 0.3);
 }
 
 .stat-card {
   border-left: 4px solid #3C99DC;
   transition: all 0.3s ease;
+  background: linear-gradient(to right, rgba(213, 243, 254, 0.2), rgba(255, 255, 255, 0.8));
 }
 
 .stat-card:hover {
   border-left-width: 8px;
+  background: linear-gradient(to right, rgba(213, 243, 254, 0.4), rgba(255, 255, 255, 0.9));
+}
+
+/* Navigation Menu Styles */
+[data-radix-navigation-menu-trigger] {
+  transition: all 0.2s ease;
+}
+
+[data-radix-navigation-menu-trigger][data-state="open"] {
+  background-color: rgba(213, 243, 254, 0.6) !important;
+  color: #0F5298 !important;
 }
 
 /* Custom Scrollbar */
@@ -55,4 +69,48 @@
 
 ::-webkit-scrollbar-thumb:hover {
   background: #2565AE;
+}
+
+/* Avatar & Icons */
+.user-avatar {
+  border: 2px solid #3C99DC;
+}
+
+.feature-icon {
+  background: linear-gradient(135deg, #66D3FA, #3C99DC);
+  color: white;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+}
+
+/* Button Styles */
+.btn-gradient {
+  background: linear-gradient(90deg, #3C99DC, #66D3FA);
+  color: white;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.btn-gradient:hover {
+  background: linear-gradient(90deg, #2565AE, #3C99DC);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(60, 153, 220, 0.3);
+}
+
+/* Dashboard Content Cards */
+.dashboard-content-card {
+  border-radius: 1rem;
+  border: 1px solid rgba(213, 243, 254, 0.5);
+  background-color: white;
+  transition: all 0.3s ease;
+}
+
+.dashboard-content-card:hover {
+  border-color: #3C99DC;
+  box-shadow: 0 5px 15px rgba(60, 153, 220, 0.1);
+}
+
+/* Dashboard Layout */
+.dashboard-layout {
+  background-color: #f8fcff;
 }

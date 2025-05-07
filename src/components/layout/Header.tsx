@@ -9,7 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Book, ChevronDown, LogIn, LogOut, Menu, Search, Settings, User } from "lucide-react";
+import { ChevronDown, LogIn, LogOut, Menu, Search, Settings, User } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 
 const Header: React.FC = () => {
@@ -40,8 +40,12 @@ const Header: React.FC = () => {
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center gap-6">
           <Link to="/" className="flex items-center gap-2">
-            <Book className="h-6 w-6 text-primary" />
-            <span className="text-xl font-bold">LearnifyNexus</span>
+            <img
+              src="/lovable-uploads/b14b8995-4cec-4fca-af8c-857f1e9e3699.png"
+              alt="LearnUp Logo"
+              className="h-8 w-auto"
+            />
+            <span className="text-xl font-bold bg-gradient-to-r from-learnup-blue1 to-learnup-blue2 bg-clip-text text-transparent">LearnUp</span>
           </Link>
           
           <nav className="hidden md:flex items-center gap-6">
@@ -94,7 +98,7 @@ const Header: React.FC = () => {
           {isAuthenticated ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="flex items-center gap-2">
+                <Button variant="outline" className="flex items-center gap-2 border-learnup-blue3 text-learnup-blue1 hover:bg-learnup-blue3/20 hover:text-learnup-blue4">
                   <User className="h-4 w-4" />
                   <span>{user?.name}</span>
                   <ChevronDown className="h-4 w-4" />
@@ -109,7 +113,7 @@ const Header: React.FC = () => {
                 </DropdownMenuItem>
                 {user?.role === "teacher" && (
                   <DropdownMenuItem asChild>
-                    <Link to="/dashboard/teacher">My Courses</Link>
+                    <Link to="/dashboard/courses/manage">My Courses</Link>
                   </DropdownMenuItem>
                 )}
                 {user?.role === "admin" && (
@@ -130,14 +134,14 @@ const Header: React.FC = () => {
             </DropdownMenu>
           ) : (
             <>
-              <Button variant="outline" asChild>
+              <Button variant="outline" className="text-learnup-blue1 border-learnup-blue3 hover:bg-learnup-blue3/20 hover:text-learnup-blue4" asChild>
                 <Link to="/login">
                   <LogIn className="mr-2 h-4 w-4" />
                   Login
                 </Link>
               </Button>
               
-              <Button asChild>
+              <Button className="bg-gradient-to-r from-learnup-blue1 to-learnup-blue2 hover:from-learnup-blue4 hover:to-learnup-blue1 text-white" asChild>
                 <Link to="/register">Register</Link>
               </Button>
             </>
