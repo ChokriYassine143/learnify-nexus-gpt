@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -171,7 +170,7 @@ const ManageQuizzesPage: React.FC = () => {
                   <SelectValue placeholder="Filtrer par cours" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Tous les cours</SelectItem>
+                  <SelectItem value="all">Tous les cours</SelectItem>
                   {mockCourses.map(course => (
                     <SelectItem key={course.id} value={course.id}>
                       {course.title}
@@ -180,7 +179,7 @@ const ManageQuizzesPage: React.FC = () => {
                 </SelectContent>
               </Select>
             </div>
-            {selectedCourse && (
+            {selectedCourse && selectedCourse !== "all" && (
               <Button 
                 variant="outline" 
                 onClick={() => navigate(`/course/${selectedCourse}/learn`)}
@@ -345,4 +344,3 @@ const ManageQuizzesPage: React.FC = () => {
 };
 
 export default ManageQuizzesPage;
-
