@@ -70,7 +70,7 @@ const ChatbotPage: React.FC = () => {
         
         <Card className="h-[600px] flex flex-col">
           <CardContent className="flex-1 flex flex-col p-6">
-            <div className="flex-1 overflow-y-auto mb-4 space-y-4 pr-2">
+            <div className="flex-1 overflow-y-auto mb-4 space-y-4 pr-2 max-h-[400px]">
               {messages.map((message, index) => (
                 <div
                   key={index}
@@ -111,7 +111,7 @@ const ChatbotPage: React.FC = () => {
               )}
             </div>
             
-            <div className="border-t pt-4">
+            <div className="border-t pt-4 mt-auto">
               <form onSubmit={handleSendMessage} className="flex flex-col gap-2">
                 <Textarea
                   value={userInput}

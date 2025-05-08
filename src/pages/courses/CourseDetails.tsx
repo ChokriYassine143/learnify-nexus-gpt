@@ -10,6 +10,7 @@ import {
   ChevronRight,
   Clock,
   FileText,
+  Heart,
   Home,
   MessageSquare,
   Play,
@@ -19,6 +20,7 @@ import {
 } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import EnrollButton from "@/components/courses/EnrollButton";
 
 const COURSES = [
   {
@@ -32,6 +34,7 @@ const COURSES = [
     reviewCount: 324,
     duration: "10 weeks",
     students: 12543,
+    enrolled: false,
     image: "https://images.unsplash.com/photo-1587620962725-abab7fe55159?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
     category: "Web Development",
     price: 49.99,
@@ -103,6 +106,9 @@ const CourseDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const course = COURSES.find((c) => c.id === id) || COURSES[0]; // Fallback to first course
   const [activeContentSection, setActiveContentSection] = useState<number>(0);
+  
+  // Mock user authentication state
+  const isLoggedIn = true; // In a real app, this would come from an auth context
   
   return (
     <>
@@ -193,14 +199,21 @@ const CourseDetails: React.FC = () => {
                   
                   <div className="mb-4 text-center">
                     <div className="mb-2 text-3xl font-bold">
-                      ${course.price}
+                      {course.price.toLocaleString('fr-FR')} €
                     </div>
                   </div>
                   
                   <div className="space-y-4">
-                    <Button className="w-full">Enroll Now</Button>
+                    <EnrollButton 
+                      courseId={course.id}
+                      courseTitle={course.title}
+                      isLoggedIn={isLoggedIn}
+                      isEnrolled={course.enrolled}
+                      price={course.price}
+                    />
                     <Button variant="outline" className="w-full">
-                      Add to Wishlist
+                      <Heart className="mr-2 h-4 w-4" />
+                      Ajouter aux favoris
                     </Button>
                   </div>
                   

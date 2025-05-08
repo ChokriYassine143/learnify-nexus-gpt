@@ -3,9 +3,11 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
+import CourseEnrollmentModal from "./CourseEnrollmentModal";
 
 interface EnrollButtonProps {
   courseId: string;
+  courseTitle: string;
   isLoggedIn: boolean;
   isEnrolled: boolean;
   price?: number | null;
@@ -13,11 +15,13 @@ interface EnrollButtonProps {
 
 const EnrollButton: React.FC<EnrollButtonProps> = ({ 
   courseId, 
+  courseTitle,
   isLoggedIn, 
   isEnrolled,
   price = null 
 }) => {
   const [isEnrolling, setIsEnrolling] = useState(false);
+  const [showEnrollmentModal, setShowEnrollmentModal] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
   
@@ -28,42 +32,60 @@ const EnrollButton: React.FC<EnrollButtonProps> = ({
       return;
     }
     
-    // Start enrollment process
-    setIsEnrolling(true);
-    
-    // If the course is free or we're just simulating enrollment
-    if (price === null || price === 0) {
+    // For paid courses, show payment modal
+    if (price && price > 0) {
+      setShowEnrollmentModal(true);
+    } else {
+      // For free courses, directly enroll
+      setIsEnrolling(true);
+      
       setTimeout(() => {
         setIsEnrolling(false);
         toast({
-          title: "Enrolled Successfully!",
-          description: "You are now enrolled in this course.",
+          title: "Inscription réussie !",
+          description: `Vous êtes maintenant inscrit au cours : ${courseTitle}`,
         });
         // After successful enrollment, update the button state
-        // In a real app, this would come from an API call
         window.location.reload();
       }, 1000);
-    } else {
-      // For paid courses, redirect to checkout
-      navigate(`/checkout/course/${courseId}`);
     }
+  };
+
+  const handleEnrollSuccess = () => {
+    // After successful enrollment from modal
+    navigate(`/course/${courseId}/learn`);
   };
   
   if (isEnrolled) {
     return (
-      <Button onClick={() => navigate(`/course/${courseId}/learn`)}>
-        Continue Learning
-      </Button>
+      <>
+        <Button onClick={() => navigate(`/course/${courseId}/learn`)}>
+          Continuer l'apprentissage
+        </Button>
+      </>
     );
   }
   
   return (
-    <Button 
-      onClick={handleEnroll} 
-      disabled={isEnrolling}
-    >
-      {isEnrolling ? "Processing..." : price ? `Enroll - $${price}` : "Enroll for Free"}
-    </Button>
+    <>
+      <Button 
+        onClick={handleEnroll} 
+        disabled={isEnrolling}
+      >
+        {isEnrolling ? "Traitement..." : price && price > 0 ? `S'inscrire - ${price.toLocaleString('fr-FR')} €` : "S'inscrire gratuitement"}
+      </Button>
+      
+      {showEnrollmentModal && (
+        <CourseEnrollmentModal
+          isOpen={showEnrollmentModal}
+          onClose={() => setShowEnrollmentModal(false)}
+          courseId={courseId}
+          courseTitle={courseTitle}
+          coursePrice={price || 0}
+          onEnrollSuccess={handleEnrollSuccess}
+        />
+      )}
+    </>
   );
 };
 
