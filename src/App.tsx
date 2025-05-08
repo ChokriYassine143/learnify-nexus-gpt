@@ -17,19 +17,22 @@ import TeacherDashboard from "./pages/dashboard/TeacherDashboard";
 import StudentDashboard from "./pages/dashboard/StudentDashboard";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 
-// New pages
+// Pages
 import AboutUs from "./pages/about/AboutUs";
 import ContactUs from "./pages/contact/ContactUs";
 import CourseLearningPage from "./pages/courses/CourseLearningPage";
 import CreateForumPost from "./pages/forum/CreateForumPost";
 import ForumTopicPage from "./pages/forum/ForumTopicPage";
 
-// Placeholder pages for sprint routes
+// Dashboard pages
 import ProfilePage from "./pages/dashboard/ProfilePage";
 import ManageCoursesPage from "./pages/dashboard/courses/ManageCoursesPage";
+import CreateCoursePage from "./pages/dashboard/courses/CreateCoursePage";
 import ResourcesPage from "./pages/dashboard/resources/ResourcesPage";
+import ManageResourcesPage from "./pages/dashboard/resources/ManageResourcesPage";
 import QuizzesPage from "./pages/dashboard/quizzes/QuizzesPage";
 import ManageQuizzesPage from "./pages/dashboard/quizzes/ManageQuizzesPage";
+import CreateQuizPage from "./pages/dashboard/quizzes/CreateQuizPage";
 import PaymentsPage from "./pages/dashboard/payments/PaymentsPage";
 import MonitorPaymentsPage from "./pages/dashboard/payments/MonitorPaymentsPage";
 import ChatbotPage from "./pages/dashboard/ChatbotPage";
@@ -81,8 +84,16 @@ const App = () => (
                 <Route index element={<ManageCoursesPage />} />
               </Route>
               
+              <Route path="courses/create" element={<ProtectedRoute allowedRoles={["admin", "teacher"]} />}>
+                <Route index element={<CreateCoursePage />} />
+              </Route>
+
               <Route path="resources" element={<ProtectedRoute allowedRoles={["admin", "teacher"]} />}>
                 <Route index element={<ResourcesPage />} />
+              </Route>
+
+              <Route path="resources/manage" element={<ProtectedRoute allowedRoles={["admin", "teacher"]} />}>
+                <Route index element={<ManageResourcesPage />} />
               </Route>
               
               {/* Sprint 3 Routes */}
@@ -92,6 +103,10 @@ const App = () => (
               
               <Route path="quizzes/manage" element={<ProtectedRoute allowedRoles={["admin", "teacher"]} />}>
                 <Route index element={<ManageQuizzesPage />} />
+              </Route>
+
+              <Route path="quizzes/create" element={<ProtectedRoute allowedRoles={["admin", "teacher"]} />}>
+                <Route index element={<CreateQuizPage />} />
               </Route>
               
               <Route path="payments" element={<ProtectedRoute allowedRoles={["student"]} />}>
