@@ -1,18 +1,36 @@
 
 import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Play, FileText, HelpCircle } from "lucide-react";
+import { Play, FileText, HelpCircle, Lock } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Lesson } from "./CourseSidebar";
 
 interface LessonContentProps {
-  lesson: {
-    id: string;
-    title: string;
-    type: string;
-  }
+  lesson: Lesson;
+  isEnrolled?: boolean;
+  onEnroll?: () => void;
 }
 
-const LessonContent: React.FC<LessonContentProps> = ({ lesson }) => {
+const LessonContent: React.FC<LessonContentProps> = ({ lesson, isEnrolled = true, onEnroll }) => {
   // This would typically load content from an API based on the lesson ID
+  
+  // For locked content when not enrolled
+  if (lesson.locked && !isEnrolled) {
+    return (
+      <div className="flex flex-col items-center justify-center py-16 text-center">
+        <div className="bg-gray-100 rounded-full p-6 mb-5">
+          <Lock className="h-12 w-12 text-gray-400" />
+        </div>
+        <h2 className="text-2xl font-bold mb-2">Contenu verrouillé</h2>
+        <p className="text-gray-600 mb-8 max-w-md">
+          Inscrivez-vous à ce cours pour accéder à cette leçon et à tout le contenu du cours.
+        </p>
+        <Button onClick={onEnroll} size="lg">
+          S'inscrire à ce cours
+        </Button>
+      </div>
+    );
+  }
   
   // For demo purposes, we'll render different content based on lesson type
   const renderContent = () => {
@@ -20,11 +38,16 @@ const LessonContent: React.FC<LessonContentProps> = ({ lesson }) => {
       case "video":
         return (
           <div className="space-y-6">
-            <div className="aspect-video bg-gray-900 rounded-md flex items-center justify-center">
-              <div className="text-center">
-                <Play className="h-16 w-16 text-white/50 mx-auto" />
-                <p className="text-white/70 mt-4">Vidéo de démonstration</p>
+            <div className="aspect-video bg-gray-900 rounded-md flex items-center justify-center relative overflow-hidden group">
+              <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center transition-opacity group-hover:bg-opacity-30">
+                <Button variant="outline" size="icon" className="w-16 h-16 rounded-full bg-white bg-opacity-20 backdrop-blur-sm border-2 border-white transition-transform hover:scale-110">
+                  <Play className="h-8 w-8 text-white" fill="white" />
+                </Button>
               </div>
+              <video 
+                poster="/placeholder.svg" 
+                className="w-full h-full object-cover"
+              />
             </div>
             
             <div className="prose max-w-none">

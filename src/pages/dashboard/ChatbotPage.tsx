@@ -82,6 +82,7 @@ const ChatbotPage: React.FC = () => {
                         ? 'bg-primary text-white rounded-br-none'
                         : 'bg-gray-100 text-gray-800 rounded-bl-none'
                     }`}
+                    style={{ wordBreak: 'break-word' }}
                   >
                     {message.role === 'assistant' && (
                       <div className="flex items-center mb-1">
@@ -89,7 +90,7 @@ const ChatbotPage: React.FC = () => {
                         <span className="font-semibold">Assistant</span>
                       </div>
                     )}
-                    <p className="whitespace-pre-wrap break-words">{message.content}</p>
+                    <p>{message.content}</p>
                   </div>
                 </div>
               ))}
