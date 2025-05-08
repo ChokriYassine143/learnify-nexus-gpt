@@ -7,13 +7,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle, Play, FileText, MessageSquare, BookOpen } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import CourseSidebar from "@/components/courses/CourseSidebar";
 import LessonContent from "@/components/courses/LessonContent";
 import QuizComponent from "@/components/courses/QuizComponent";
 
-// Mock data
+// Mock data with proper type annotations for lessons
 const courseMockData = {
   id: "1",
   title: "Web Development Fundamentals",
@@ -26,10 +27,10 @@ const courseMockData = {
       title: "Introduction to HTML",
       complete: true,
       lessons: [
-        { id: "l1", title: "HTML Basics", type: "video", duration: "12:30", complete: true },
-        { id: "l2", title: "HTML Elements", type: "video", duration: "15:45", complete: true },
-        { id: "l3", title: "HTML Forms", type: "reading", duration: "10 min", complete: true },
-        { id: "l4", title: "HTML Quiz", type: "quiz", duration: "15 min", complete: true }
+        { id: "l1", title: "HTML Basics", type: "video" as const, duration: "12:30", complete: true },
+        { id: "l2", title: "HTML Elements", type: "video" as const, duration: "15:45", complete: true },
+        { id: "l3", title: "HTML Forms", type: "reading" as const, duration: "10 min", complete: true },
+        { id: "l4", title: "HTML Quiz", type: "quiz" as const, duration: "15 min", complete: true }
       ]
     },
     {
@@ -37,10 +38,10 @@ const courseMockData = {
       title: "CSS Fundamentals",
       complete: true,
       lessons: [
-        { id: "l5", title: "CSS Selectors", type: "video", duration: "14:20", complete: true },
-        { id: "l6", title: "CSS Box Model", type: "video", duration: "18:15", complete: true },
-        { id: "l7", title: "CSS Layouts", type: "reading", duration: "15 min", complete: false },
-        { id: "l8", title: "CSS Quiz", type: "quiz", duration: "20 min", complete: false }
+        { id: "l5", title: "CSS Selectors", type: "video" as const, duration: "14:20", complete: true },
+        { id: "l6", title: "CSS Box Model", type: "video" as const, duration: "18:15", complete: true },
+        { id: "l7", title: "CSS Layouts", type: "reading" as const, duration: "15 min", complete: false },
+        { id: "l8", title: "CSS Quiz", type: "quiz" as const, duration: "20 min", complete: false }
       ]
     },
     {
@@ -48,10 +49,10 @@ const courseMockData = {
       title: "JavaScript Basics",
       complete: false,
       lessons: [
-        { id: "l9", title: "JavaScript Syntax", type: "video", duration: "20:10", complete: false },
-        { id: "l10", title: "JavaScript Functions", type: "video", duration: "22:35", complete: false },
-        { id: "l11", title: "DOM Manipulation", type: "reading", duration: "15 min", complete: false },
-        { id: "l12", title: "JavaScript Quiz", type: "quiz", duration: "25 min", complete: false }
+        { id: "l9", title: "JavaScript Syntax", type: "video" as const, duration: "20:10", complete: false },
+        { id: "l10", title: "JavaScript Functions", type: "video" as const, duration: "22:35", complete: false },
+        { id: "l11", title: "DOM Manipulation", type: "reading" as const, duration: "15 min", complete: false },
+        { id: "l12", title: "JavaScript Quiz", type: "quiz" as const, duration: "25 min", complete: false }
       ]
     }
   ]

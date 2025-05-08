@@ -26,6 +26,8 @@ interface Module {
 interface Course {
   id: string;
   title: string;
+  description?: string;
+  instructor?: string;
   modules: Module[];
   progress: number;
 }
