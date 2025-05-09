@@ -35,8 +35,8 @@ const HeroSection: React.FC = () => {
             <Button
               size="lg"
               asChild
-              variant="outline"
-              className="text-base border-2 border-white text-white hover:bg-white/20 hover:scale-105 shadow-lg transform transition-transform duration-300 ease-in-out"
+
+             className="text-base bg-white text-learnup-blue1 hover:bg-gray-100 hover:scale-105 shadow-lg transform transition-transform duration-300 ease-in-out"
             >
               <Link to="/register">Join For Free</Link>
             </Button>

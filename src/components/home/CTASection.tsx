@@ -33,8 +33,8 @@ const CTASection: React.FC = () => {
             </Button>
             <Button 
               size="lg" 
-              variant="outline" 
-              className="border-2 border-white text-white hover:bg-white/10 hover:scale-105 shadow-lg transform transition-transform duration-300 ease-in-out font-semibold px-8 hover:shadow-xl" 
+         
+              className="bg-white text-learnup-blue1 hover:bg-gray-100 hover:scale-105 shadow-lg transform transition-transform duration-300 ease-in-out font-semibold px-8 hover:shadow-xl" 
               asChild
             >
               <Link to="/courses">Explore Courses</Link>

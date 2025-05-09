@@ -66,12 +66,7 @@ const SettingsPage: React.FC = () => {
                       <Sun className="mr-2 h-4 w-4" /> Clair
                     </Label>
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="dark" id="dark" />
-                    <Label htmlFor="dark" className="flex items-center">
-                      <Moon className="mr-2 h-4 w-4" /> Sombre
-                    </Label>
-                  </div>
+                
                 </RadioGroup>
               </div>
 
