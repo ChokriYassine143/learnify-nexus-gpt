@@ -201,6 +201,9 @@ const Header: React.FC = () => {
                   <Link to="/profile" className="nav-link">
                     My Profile
                   </Link>
+                  <Link to="/settings" className="nav-link">
+                    Settings
+                  </Link>
                   <button 
                     onClick={handleLogout}
                     className="flex w-full items-center text-left px-2 py-1 text-red-600"

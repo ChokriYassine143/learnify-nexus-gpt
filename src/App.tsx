@@ -25,7 +25,8 @@ import CreateForumPost from "./pages/forum/CreateForumPost";
 import ForumTopicPage from "./pages/forum/ForumTopicPage";
 
 // Dashboard pages
-import ProfilePage from "./pages/dashboard/ProfilePage";
+import ProfilePage from "./pages/profile/ProfilePage";
+import SettingsPage from "./pages/settings/SettingsPage";
 import ManageCoursesPage from "./pages/dashboard/courses/ManageCoursesPage";
 import CreateCoursePage from "./pages/dashboard/courses/CreateCoursePage";
 import ResourcesPage from "./pages/dashboard/resources/ResourcesPage";
@@ -58,6 +59,14 @@ const App = () => (
             <Route path="/forum/:topicId" element={<ForumTopicPage />} />
             <Route path="/about" element={<AboutUs />} />
             <Route path="/contact" element={<ContactUs />} />
+            
+            {/* User profile and settings routes */}
+            <Route path="/profile" element={<ProtectedRoute>
+              <ProfilePage />
+            </ProtectedRoute>} />
+            <Route path="/settings" element={<ProtectedRoute>
+              <SettingsPage />
+            </ProtectedRoute>} />
             
             {/* Protected Dashboard Routes */}
             <Route path="/dashboard" element={<ProtectedRoute />}>
