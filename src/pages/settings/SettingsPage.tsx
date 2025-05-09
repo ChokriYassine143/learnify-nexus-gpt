@@ -12,16 +12,20 @@ import { Settings, Sun, Moon } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
+import { useTheme } from "@/contexts/ThemeContext";
 
 const SettingsPage: React.FC = () => {
-  const [theme, setTheme] = useState("light");
-  const [notifications, setNotifications] = useState(true);
-  const [emailUpdates, setEmailUpdates] = useState(true);
-  const [layoutType, setLayoutType] = useState("default");
+  const { theme, setTheme, layoutType, setLayoutType } = useTheme();
+  const [notifications, setNotifications] = useState(() => {
+    return localStorage.getItem("notifications") === "true";
+  });
+  const [emailUpdates, setEmailUpdates] = useState(() => {
+    return localStorage.getItem("emailUpdates") === "true";
+  });
   const { toast } = useToast();
 
   const handleSaveSettings = () => {
-    // In a real app, this would save to user preferences in the backend
+    // Save all settings to localStorage
     localStorage.setItem("theme", theme);
     localStorage.setItem("notifications", String(notifications));
     localStorage.setItem("emailUpdates", String(emailUpdates));
@@ -39,11 +43,11 @@ const SettingsPage: React.FC = () => {
       <DashboardLayout>
         <div className="mb-8">
           <h1 className="text-3xl font-bold">Paramètres</h1>
-          <p className="text-gray-600 mt-2">Personnalisez votre expérience</p>
+          <p className="text-gray-600 dark:text-gray-400 mt-2">Personnalisez votre expérience</p>
         </div>
         
         <div className="space-y-6">
-          <Card>
+          <Card className="dark:bg-gray-800 dark:border-gray-700">
             <CardHeader>
               <CardTitle>Apparence</CardTitle>
               <CardDescription>Gérez l'apparence et le thème</CardDescription>
@@ -53,7 +57,7 @@ const SettingsPage: React.FC = () => {
                 <Label htmlFor="theme">Thème</Label>
                 <RadioGroup 
                   value={theme} 
-                  onValueChange={setTheme}
+                  onValueChange={(value) => setTheme(value as "light" | "dark")}
                   className="flex space-x-4"
                 >
                   <div className="flex items-center space-x-2">
@@ -75,7 +79,7 @@ const SettingsPage: React.FC = () => {
                 <Label htmlFor="layout">Disposition</Label>
                 <RadioGroup 
                   value={layoutType} 
-                  onValueChange={setLayoutType}
+                  onValueChange={(value) => setLayoutType(value as "default" | "compact" | "expanded")}
                   className="flex flex-col space-y-2"
                 >
                   <div className="flex items-center space-x-2">
@@ -95,7 +99,7 @@ const SettingsPage: React.FC = () => {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="dark:bg-gray-800 dark:border-gray-700">
             <CardHeader>
               <CardTitle>Notifications</CardTitle>
               <CardDescription>Gérez vos préférences de notification</CardDescription>
@@ -104,7 +108,7 @@ const SettingsPage: React.FC = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="font-medium">Notifications sur site</p>
-                  <p className="text-sm text-gray-500">Recevoir des notifications dans l'application</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">Recevoir des notifications dans l'application</p>
                 </div>
                 <Switch 
                   checked={notifications} 
@@ -114,7 +118,7 @@ const SettingsPage: React.FC = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="font-medium">Mises à jour par email</p>
-                  <p className="text-sm text-gray-500">Recevoir des mises à jour par email</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">Recevoir des mises à jour par email</p>
                 </div>
                 <Switch 
                   checked={emailUpdates} 
