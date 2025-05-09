@@ -61,12 +61,10 @@ const App = () => (
             <Route path="/contact" element={<ContactUs />} />
             
             {/* User profile and settings routes */}
-            <Route path="/profile" element={<ProtectedRoute>
-              <ProfilePage />
-            </ProtectedRoute>} />
-            <Route path="/settings" element={<ProtectedRoute>
-              <SettingsPage />
-            </ProtectedRoute>} />
+            <Route element={<ProtectedRoute />}>
+              <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/settings" element={<SettingsPage />} />
+            </Route>
             
             {/* Protected Dashboard Routes */}
             <Route path="/dashboard" element={<ProtectedRoute />}>
