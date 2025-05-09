@@ -39,6 +39,10 @@ import PaymentsPage from "./pages/dashboard/payments/PaymentsPage";
 import MonitorPaymentsPage from "./pages/dashboard/payments/MonitorPaymentsPage";
 import ChatbotPage from "./pages/dashboard/ChatbotPage";
 import AssignmentsPage from "./pages/dashboard/assignments/AssignmentsPage";
+import TeacherAssignmentsPage from "./pages/dashboard/assignments/TeacherAssignmentsPage";
+import UserManagementPage from "./pages/dashboard/users/UserManagementPage";
+import CourseEditPage from "./pages/dashboard/courses/CourseEditPage";
+import ForumManagementPage from "./pages/dashboard/forum/ForumManagementPage";
 
 const queryClient = new QueryClient();
 
@@ -99,7 +103,7 @@ const App = () => (
                 </Route>
 
                 <Route path="courses/edit/:id" element={<ProtectedRoute allowedRoles={["admin", "teacher"]} />}>
-                  <Route index element={<CreateCoursePage />} />
+                  <Route index element={<CourseEditPage />} />
                 </Route>
 
                 <Route path="resources" element={<ProtectedRoute allowedRoles={["admin", "teacher"]} />}>
@@ -119,6 +123,10 @@ const App = () => (
                   <Route index element={<AssignmentsPage />} />
                 </Route>
                 
+                <Route path="assignments/manage" element={<ProtectedRoute allowedRoles={["admin", "teacher"]} />}>
+                  <Route index element={<TeacherAssignmentsPage />} />
+                </Route>
+                
                 <Route path="quizzes/manage" element={<ProtectedRoute allowedRoles={["admin", "teacher"]} />}>
                   <Route index element={<ManageQuizzesPage />} />
                 </Route>
@@ -133,6 +141,15 @@ const App = () => (
                 
                 <Route path="payments/monitor" element={<ProtectedRoute allowedRoles={["admin"]} />}>
                   <Route index element={<MonitorPaymentsPage />} />
+                </Route>
+                
+                {/* Admin only routes */}
+                <Route path="users/manage" element={<ProtectedRoute allowedRoles={["admin"]} />}>
+                  <Route index element={<UserManagementPage />} />
+                </Route>
+                
+                <Route path="forum/manage" element={<ProtectedRoute allowedRoles={["admin", "teacher"]} />}>
+                  <Route index element={<ForumManagementPage />} />
                 </Route>
                 
                 {/* Sprint 4 Routes - Chatbot available to all roles */}

@@ -1,10 +1,9 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { Users, BookOpen, MessageSquare, Settings } from "lucide-react";
+import { Users, BookOpen, MessageSquare, Settings, Edit, Trash2, Shield, ShieldOff } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
@@ -165,9 +164,19 @@ const AdminDashboard: React.FC = () => {
           {/* Users Tab Content */}
           <TabsContent value="users" className="mt-6">
             <Card className="dashboard-card border-learnup-blue3/20">
-              <CardHeader className="bg-gradient-to-r from-learnup-blue3/10 to-transparent">
-                <CardTitle className="text-learnup-blue5">User Management</CardTitle>
-                <CardDescription>View and manage user accounts</CardDescription>
+              <CardHeader className="bg-gradient-to-r from-learnup-blue3/10 to-transparent flex flex-row items-center justify-between">
+                <div>
+                  <CardTitle className="text-learnup-blue5">User Management</CardTitle>
+                  <CardDescription>View and manage user accounts</CardDescription>
+                </div>
+                <Button
+                  className="bg-gradient-to-r from-learnup-blue1 to-learnup-blue2 hover:from-learnup-blue4 hover:to-learnup-blue1 text-white"
+                  as={Link}
+                  to="/dashboard/users/manage"
+                >
+                  <Users className="mr-2 h-4 w-4" />
+                  Manage Users
+                </Button>
               </CardHeader>
               <CardContent>
                 <div className="flex justify-between items-center mb-6">
@@ -223,8 +232,16 @@ const AdminDashboard: React.FC = () => {
                         </td>
                         <td className="p-3">
                           <div className="flex gap-2">
-                            <Button variant="outline" size="sm" className="border-learnup-blue1 text-learnup-blue1 hover:bg-learnup-blue3 hover:text-learnup-blue5">Edit</Button>
-                            <Button variant="destructive" size="sm">Disable</Button>
+                            <Button 
+                              variant="outline" 
+                              size="sm" 
+                              className="border-learnup-blue1 text-learnup-blue1 hover:bg-learnup-blue3 hover:text-learnup-blue5"
+                            >
+                              <Edit className="h-4 w-4" />
+                            </Button>
+                            <Button variant="destructive" size="sm">
+                              <ShieldOff className="h-4 w-4" />
+                            </Button>
                           </div>
                         </td>
                       </tr>
@@ -237,8 +254,16 @@ const AdminDashboard: React.FC = () => {
                         </td>
                         <td className="p-3">
                           <div className="flex gap-2">
-                            <Button variant="outline" size="sm" className="border-learnup-blue1 text-learnup-blue1 hover:bg-learnup-blue3 hover:text-learnup-blue5">Edit</Button>
-                            <Button variant="destructive" size="sm">Disable</Button>
+                            <Button 
+                              variant="outline" 
+                              size="sm" 
+                              className="border-learnup-blue1 text-learnup-blue1 hover:bg-learnup-blue3 hover:text-learnup-blue5"
+                            >
+                              <Edit className="h-4 w-4" />
+                            </Button>
+                            <Button variant="destructive" size="sm">
+                              <ShieldOff className="h-4 w-4" />
+                            </Button>
                           </div>
                         </td>
                       </tr>
@@ -251,8 +276,16 @@ const AdminDashboard: React.FC = () => {
                         </td>
                         <td className="p-3">
                           <div className="flex gap-2">
-                            <Button variant="outline" size="sm" className="border-learnup-blue1 text-learnup-blue1 hover:bg-learnup-blue3 hover:text-learnup-blue5">Edit</Button>
-                            <Button variant="destructive" size="sm">Disable</Button>
+                            <Button 
+                              variant="outline" 
+                              size="sm" 
+                              className="border-learnup-blue1 text-learnup-blue1 hover:bg-learnup-blue3 hover:text-learnup-blue5"
+                            >
+                              <Edit className="h-4 w-4" />
+                            </Button>
+                            <Button variant="destructive" size="sm">
+                              <ShieldOff className="h-4 w-4" />
+                            </Button>
                           </div>
                         </td>
                       </tr>
@@ -280,9 +313,19 @@ const AdminDashboard: React.FC = () => {
           {/* Courses Tab Content */}
           <TabsContent value="courses" className="mt-6">
             <Card className="dashboard-card border-learnup-blue3/20">
-              <CardHeader className="bg-gradient-to-r from-learnup-blue3/10 to-transparent">
-                <CardTitle className="text-learnup-blue5">Course Management</CardTitle>
-                <CardDescription>View and manage all courses</CardDescription>
+              <CardHeader className="bg-gradient-to-r from-learnup-blue3/10 to-transparent flex flex-row items-center justify-between">
+                <div>
+                  <CardTitle className="text-learnup-blue5">Course Management</CardTitle>
+                  <CardDescription>View and manage all courses</CardDescription>
+                </div>
+                <Button
+                  className="bg-gradient-to-r from-learnup-blue1 to-learnup-blue2 hover:from-learnup-blue4 hover:to-learnup-blue1 text-white"
+                  as={Link}
+                  to="/dashboard/courses/manage"
+                >
+                  <BookOpen className="mr-2 h-4 w-4" />
+                  Manage Courses
+                </Button>
               </CardHeader>
               <CardContent>
                 <div className="flex justify-between items-center mb-6">
@@ -333,8 +376,20 @@ const AdminDashboard: React.FC = () => {
                       </div>
                     </CardContent>
                     <CardFooter className="px-4 py-3 border-t bg-learnup-blue3/5 flex justify-between">
-                      <Button variant="outline" size="sm" className="border-learnup-blue1 text-learnup-blue1 hover:bg-learnup-blue3 hover:text-learnup-blue5">Edit</Button>
-                      <Button variant="destructive" size="sm">Delete</Button>
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className="border-learnup-blue1 text-learnup-blue1 hover:bg-learnup-blue3 hover:text-learnup-blue5"
+                        as={Link}
+                        to="/dashboard/courses/edit/1"
+                      >
+                        <Edit className="mr-1 h-4 w-4" />
+                        Edit
+                      </Button>
+                      <Button variant="destructive" size="sm">
+                        <Trash2 className="mr-1 h-4 w-4" />
+                        Delete
+                      </Button>
                     </CardFooter>
                   </Card>
                   
@@ -353,8 +408,20 @@ const AdminDashboard: React.FC = () => {
                       </div>
                     </CardContent>
                     <CardFooter className="px-4 py-3 border-t bg-learnup-blue3/5 flex justify-between">
-                      <Button variant="outline" size="sm" className="border-learnup-blue1 text-learnup-blue1 hover:bg-learnup-blue3 hover:text-learnup-blue5">Edit</Button>
-                      <Button variant="destructive" size="sm">Delete</Button>
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className="border-learnup-blue1 text-learnup-blue1 hover:bg-learnup-blue3 hover:text-learnup-blue5"
+                        as={Link}
+                        to="/dashboard/courses/edit/2"
+                      >
+                        <Edit className="mr-1 h-4 w-4" />
+                        Edit
+                      </Button>
+                      <Button variant="destructive" size="sm">
+                        <Trash2 className="mr-1 h-4 w-4" />
+                        Delete
+                      </Button>
                     </CardFooter>
                   </Card>
                   
@@ -373,14 +440,33 @@ const AdminDashboard: React.FC = () => {
                       </div>
                     </CardContent>
                     <CardFooter className="px-4 py-3 border-t bg-learnup-blue3/5 flex justify-between">
-                      <Button variant="outline" size="sm" className="border-learnup-blue1 text-learnup-blue1 hover:bg-learnup-blue3 hover:text-learnup-blue5">Edit</Button>
-                      <Button variant="destructive" size="sm">Delete</Button>
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className="border-learnup-blue1 text-learnup-blue1 hover:bg-learnup-blue3 hover:text-learnup-blue5"
+                        as={Link}
+                        to="/dashboard/courses/edit/3"
+                      >
+                        <Edit className="mr-1 h-4 w-4" />
+                        Edit
+                      </Button>
+                      <Button variant="destructive" size="sm">
+                        <Trash2 className="mr-1 h-4 w-4" />
+                        Delete
+                      </Button>
                     </CardFooter>
                   </Card>
                 </div>
               </CardContent>
               <CardFooter className="border-t py-3 px-6 bg-learnup-blue3/5">
-                <Button variant="outline" className="w-full border-learnup-blue1 text-learnup-blue1 hover:bg-learnup-blue3 hover:text-learnup-blue5">View All Courses</Button>
+                <Button 
+                  variant="outline" 
+                  className="w-full border-learnup-blue1 text-learnup-blue1 hover:bg-learnup-blue3 hover:text-learnup-blue5"
+                  as={Link}
+                  to="/dashboard/courses/manage"
+                >
+                  View All Courses
+                </Button>
               </CardFooter>
             </Card>
           </TabsContent>
@@ -388,9 +474,19 @@ const AdminDashboard: React.FC = () => {
           {/* Forums Tab Content */}
           <TabsContent value="forums" className="mt-6">
             <Card className="dashboard-card border-learnup-blue3/20">
-              <CardHeader className="bg-gradient-to-r from-learnup-blue3/10 to-transparent">
-                <CardTitle className="text-learnup-blue5">Forum Management</CardTitle>
-                <CardDescription>Manage forum categories and discussions</CardDescription>
+              <CardHeader className="bg-gradient-to-r from-learnup-blue3/10 to-transparent flex flex-row items-center justify-between">
+                <div>
+                  <CardTitle className="text-learnup-blue5">Forum Management</CardTitle>
+                  <CardDescription>Manage forum categories and discussions</CardDescription>
+                </div>
+                <Button
+                  className="bg-gradient-to-r from-learnup-blue1 to-learnup-blue2 hover:from-learnup-blue4 hover:to-learnup-blue1 text-white"
+                  as={Link}
+                  to="/dashboard/forum/manage"
+                >
+                  <MessageSquare className="mr-2 h-4 w-4" />
+                  Manage Forums
+                </Button>
               </CardHeader>
               <CardContent>
                 <div className="flex justify-between items-center mb-6">
