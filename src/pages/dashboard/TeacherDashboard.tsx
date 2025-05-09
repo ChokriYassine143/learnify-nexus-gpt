@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Link } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -28,10 +29,12 @@ const TeacherDashboard: React.FC = () => {
           <TabsContent value="courses" className="mt-6">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-semibold">Your Courses</h2>
-              <Button as={Link} to="/dashboard/courses/create">
-                <BookOpen className="mr-2 h-4 w-4" />
-                Create New Course
-              </Button>
+              <Link to="/dashboard/courses/create">
+                <Button>
+                  <BookOpen className="mr-2 h-4 w-4" />
+                  Create New Course
+                </Button>
+              </Link>
             </div>
             
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -49,12 +52,16 @@ const TeacherDashboard: React.FC = () => {
                   </div>
                 </CardContent>
                 <CardFooter className="px-4 py-3 border-t flex justify-between">
-                  <Button variant="outline" size="sm">
-                    <Link to="/dashboard/courses/edit/1">Edit Course</Link>
-                  </Button>
-                  <Button size="sm">
-                    <Link to="/dashboard/courses/manage">Manage</Link>
-                  </Button>
+                  <Link to="/dashboard/courses/edit/1">
+                    <Button variant="outline" size="sm">
+                      Edit Course
+                    </Button>
+                  </Link>
+                  <Link to="/dashboard/courses/manage">
+                    <Button size="sm">
+                      Manage
+                    </Button>
+                  </Link>
                 </CardFooter>
               </Card>
               
@@ -72,12 +79,16 @@ const TeacherDashboard: React.FC = () => {
                   </div>
                 </CardContent>
                 <CardFooter className="px-4 py-3 border-t flex justify-between">
-                  <Button variant="outline" size="sm">
-                    <Link to="/dashboard/courses/edit/2">Edit Course</Link>
-                  </Button>
-                  <Button size="sm">
-                    <Link to="/dashboard/courses/manage">Manage</Link>
-                  </Button>
+                  <Link to="/dashboard/courses/edit/2">
+                    <Button variant="outline" size="sm">
+                      Edit Course
+                    </Button>
+                  </Link>
+                  <Link to="/dashboard/courses/manage">
+                    <Button size="sm">
+                      Manage
+                    </Button>
+                  </Link>
                 </CardFooter>
               </Card>
               
@@ -87,10 +98,12 @@ const TeacherDashboard: React.FC = () => {
                   <CardTitle className="text-base text-gray-600">Create New Course</CardTitle>
                 </CardHeader>
                 <CardFooter className="px-4 py-3 border-t">
-                  <Button className="w-full" as={Link} to="/dashboard/courses/create">
-                    <BookOpen className="mr-2 h-4 w-4" />
-                    Create Course
-                  </Button>
+                  <Link to="/dashboard/courses/create" className="w-full">
+                    <Button className="w-full">
+                      <BookOpen className="mr-2 h-4 w-4" />
+                      Create Course
+                    </Button>
+                  </Link>
                 </CardFooter>
               </Card>
             </div>
@@ -98,13 +111,17 @@ const TeacherDashboard: React.FC = () => {
             <div className="mt-8 flex justify-between items-center">
               <h2 className="text-xl font-semibold">Assignments & Quizzes</h2>
               <div className="flex gap-3">
-                <Button variant="outline" as={Link} to="/dashboard/quizzes/manage">
-                  Manage Quizzes
-                </Button>
-                <Button as={Link} to="/dashboard/assignments/manage">
-                  <FileText className="mr-2 h-4 w-4" />
-                  Student Assignments
-                </Button>
+                <Link to="/dashboard/quizzes/manage">
+                  <Button variant="outline">
+                    Manage Quizzes
+                  </Button>
+                </Link>
+                <Link to="/dashboard/assignments/manage">
+                  <Button>
+                    <FileText className="mr-2 h-4 w-4" />
+                    Student Assignments
+                  </Button>
+                </Link>
               </div>
             </div>
             
@@ -126,9 +143,11 @@ const TeacherDashboard: React.FC = () => {
                         <span>Web Development Fundamentals</span>
                       </div>
                     </div>
-                    <Button size="sm" as={Link} to="/dashboard/assignments/manage">
-                      Review
-                    </Button>
+                    <Link to="/dashboard/assignments/manage">
+                      <Button size="sm">
+                        Review
+                      </Button>
+                    </Link>
                   </div>
                   
                   <div className="flex justify-between items-center p-3 border rounded-lg hover:bg-gray-50">
@@ -140,9 +159,11 @@ const TeacherDashboard: React.FC = () => {
                         <span>Backend Development</span>
                       </div>
                     </div>
-                    <Button size="sm" as={Link} to="/dashboard/assignments/manage">
-                      Review
-                    </Button>
+                    <Link to="/dashboard/assignments/manage">
+                      <Button size="sm">
+                        Review
+                      </Button>
+                    </Link>
                   </div>
                 </div>
               </CardContent>
@@ -321,10 +342,12 @@ const TeacherDashboard: React.FC = () => {
                   <CardTitle>Course Discussion Forums</CardTitle>
                   <CardDescription>Manage forum discussions for your courses</CardDescription>
                 </div>
-                <Button as={Link} to="/dashboard/forum/manage">
-                  <MessageSquare className="mr-2 h-4 w-4" />
-                  Manage Forums
-                </Button>
+                <Link to="/dashboard/forum/manage">
+                  <Button>
+                    <MessageSquare className="mr-2 h-4 w-4" />
+                    Manage Forums
+                  </Button>
+                </Link>
               </CardHeader>
               <CardContent>
                 <div className="flex justify-between items-center mb-6">
