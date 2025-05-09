@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -37,6 +38,7 @@ import CreateQuizPage from "./pages/dashboard/quizzes/CreateQuizPage";
 import PaymentsPage from "./pages/dashboard/payments/PaymentsPage";
 import MonitorPaymentsPage from "./pages/dashboard/payments/MonitorPaymentsPage";
 import ChatbotPage from "./pages/dashboard/ChatbotPage";
+import AssignmentsPage from "./pages/dashboard/assignments/AssignmentsPage";
 
 const queryClient = new QueryClient();
 
@@ -96,6 +98,10 @@ const App = () => (
                   <Route index element={<CreateCoursePage />} />
                 </Route>
 
+                <Route path="courses/edit/:id" element={<ProtectedRoute allowedRoles={["admin", "teacher"]} />}>
+                  <Route index element={<CreateCoursePage />} />
+                </Route>
+
                 <Route path="resources" element={<ProtectedRoute allowedRoles={["admin", "teacher"]} />}>
                   <Route index element={<ResourcesPage />} />
                 </Route>
@@ -107,6 +113,10 @@ const App = () => (
                 {/* Sprint 3 Routes */}
                 <Route path="quizzes" element={<ProtectedRoute allowedRoles={["student"]} />}>
                   <Route index element={<QuizzesPage />} />
+                </Route>
+
+                <Route path="assignments" element={<ProtectedRoute allowedRoles={["student"]} />}>
+                  <Route index element={<AssignmentsPage />} />
                 </Route>
                 
                 <Route path="quizzes/manage" element={<ProtectedRoute allowedRoles={["admin", "teacher"]} />}>

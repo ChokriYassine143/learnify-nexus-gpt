@@ -52,7 +52,7 @@ const QuizzesPage: React.FC = () => {
   };
 
   const viewAssignment = (assignmentId: string) => {
-    navigate(`/dashboard/assignments/${assignmentId}`);
+    navigate(`/dashboard/assignments`);
   };
 
   return (
