@@ -1,16 +1,17 @@
-
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Search, Plus, Edit, Trash2, MessageSquare, Check, X, Flag } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Search, Plus, Edit, Trash2, MessageSquare, Check, X, Flag, ChevronDown } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
+import { Link } from "react-router-dom";
 
-// Sample forum data
+// Extended sample forum data with more reported posts
 const mockCategories = [
   {
     id: "c1",
@@ -91,7 +92,8 @@ const mockTopics = [
   }
 ];
 
-const mockReportedPosts = [
+// Extended reported posts data
+const extendedReportedPosts = [
   {
     id: "p1",
     topicId: "t5",
@@ -109,6 +111,33 @@ const mockReportedPosts = [
     created: "2023-11-28",
     reports: 2,
     reportReason: "Spam"
+  },
+  {
+    id: "p3",
+    topicId: "t2",
+    content: "Ce message contient une attaque personnelle envers un autre utilisateur du forum...",
+    author: "UserX",
+    created: "2023-12-01",
+    reports: 4,
+    reportReason: "Attaque personnelle"
+  },
+  {
+    id: "p4",
+    topicId: "t1",
+    content: "Ce message contient des informations trompeuses sur le sujet discuté...",
+    author: "Dev123",
+    created: "2023-12-05",
+    reports: 2,
+    reportReason: "Désinformation"
+  },
+  {
+    id: "p5",
+    topicId: "t4",
+    content: "Message hors-sujet qui ne contribue pas à la discussion...",
+    author: "RandomUser",
+    created: "2023-12-10",
+    reports: 1,
+    reportReason: "Hors-sujet"
   }
 ];
 
@@ -119,7 +148,8 @@ const ForumManagementPage: React.FC = () => {
   
   const [categories, setCategories] = useState(mockCategories);
   const [topics, setTopics] = useState(mockTopics);
-  const [reportedPosts, setReportedPosts] = useState(mockReportedPosts);
+  const [reportedPosts, setReportedPosts] = useState(extendedReportedPosts);
+  const [visibleReportedPosts, setVisibleReportedPosts] = useState(2);
   
   // Dialog states
   const [selectedItem, setSelectedItem] = useState<any>(null);
@@ -245,6 +275,10 @@ const ForumManagementPage: React.FC = () => {
     });
   };
   
+  const handleLoadMoreReportedPosts = () => {
+    setVisibleReportedPosts(prev => Math.min(prev + 2, reportedPosts.length));
+  };
+  
   // Filtering logic
   const filteredCategories = categories.filter(category => {
     if (searchQuery) {
@@ -267,6 +301,22 @@ const ForumManagementPage: React.FC = () => {
     }
     return true;
   });
+  
+  const filteredReportedPosts = reportedPosts.filter(post => {
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      const relatedTopic = topics.find(t => t.id === post.topicId);
+      return (
+        post.content.toLowerCase().includes(query) ||
+        post.author.toLowerCase().includes(query) ||
+        relatedTopic?.title.toLowerCase().includes(query) ||
+        post.reportReason.toLowerCase().includes(query)
+      );
+    }
+    return true;
+  });
+  
+  const visiblePosts = filteredReportedPosts.slice(0, visibleReportedPosts);
   
   return (
     <>
@@ -300,9 +350,18 @@ const ForumManagementPage: React.FC = () => {
 
         <Tabs defaultValue="categories" value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="mb-6">
-            <TabsTrigger value="categories">Catégories</TabsTrigger>
-            <TabsTrigger value="topics">Sujets</TabsTrigger>
-            <TabsTrigger value="reported">Messages signalés</TabsTrigger>
+            <TabsTrigger value="categories">
+              Catégories
+              <Badge variant="outline" className="ml-2">{categories.length}</Badge>
+            </TabsTrigger>
+            <TabsTrigger value="topics">
+              Sujets
+              <Badge variant="outline" className="ml-2">{topics.length}</Badge>
+            </TabsTrigger>
+            <TabsTrigger value="reported">
+              Messages signalés
+              <Badge variant="destructive" className="ml-2">{reportedPosts.length}</Badge>
+            </TabsTrigger>
           </TabsList>
           
           {/* Categories Tab */}
@@ -330,7 +389,7 @@ const ForumManagementPage: React.FC = () => {
                     <tbody>
                       {filteredCategories.length > 0 ? (
                         filteredCategories.map((category) => (
-                          <tr key={category.id} className="border-b hover:bg-gray-50 dark:hover:bg-gray-800">
+                          <tr key={category.id} className="border-b hover:bg-gray-50 dark:hover:bg-gray-800 animate-fade-in">
                             <td className="p-3 font-medium">{category.name}</td>
                             <td className="p-3 text-gray-600 dark:text-gray-400">
                               {category.description}
@@ -408,7 +467,7 @@ const ForumManagementPage: React.FC = () => {
                         filteredTopics.map((topic) => {
                           const category = categories.find(c => c.id === topic.categoryId);
                           return (
-                            <tr key={topic.id} className="border-b hover:bg-gray-50 dark:hover:bg-gray-800">
+                            <tr key={topic.id} className="border-b hover:bg-gray-50 dark:hover:bg-gray-800 animate-fade-in">
                               <td className="p-3 font-medium">
                                 <div className="flex items-center">
                                   {topic.status === 'pinned' && (
@@ -417,7 +476,9 @@ const ForumManagementPage: React.FC = () => {
                                   {topic.status === 'reported' && (
                                     <span className="mr-2 text-red-500">🚩</span>
                                   )}
-                                  {topic.title}
+                                  <Link to={`/forum/${topic.id}`} className="hover:text-primary">
+                                    {topic.title}
+                                  </Link>
                                 </div>
                               </td>
                               <td className="p-3">{topic.author}</td>
@@ -488,12 +549,12 @@ const ForumManagementPage: React.FC = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                {reportedPosts.length > 0 ? (
+                {filteredReportedPosts.length > 0 ? (
                   <div className="space-y-4">
-                    {reportedPosts.map((post) => {
+                    {visiblePosts.map((post) => {
                       const relatedTopic = topics.find(t => t.id === post.topicId);
                       return (
-                        <Card key={post.id} className="border-l-4 border-red-500">
+                        <Card key={post.id} className="border-l-4 border-red-500 animate-fade-in">
                           <CardHeader className="pb-2">
                             <div className="flex justify-between items-start">
                               <div>
@@ -552,6 +613,19 @@ const ForumManagementPage: React.FC = () => {
                         </Card>
                       );
                     })}
+                    
+                    {filteredReportedPosts.length > visibleReportedPosts && (
+                      <div className="flex justify-center mt-6">
+                        <Button 
+                          variant="outline" 
+                          onClick={handleLoadMoreReportedPosts}
+                          className="gap-2"
+                        >
+                          <span>Afficher plus de messages signalés</span>
+                          <ChevronDown className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    )}
                   </div>
                 ) : (
                   <div className="flex flex-col items-center justify-center py-12">

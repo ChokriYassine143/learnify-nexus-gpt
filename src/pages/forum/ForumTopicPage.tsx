@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -14,9 +14,12 @@ import {
   Tag,
   User,
   Clock,
+  ChevronDown,
 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import { Pagination, PaginationContent, PaginationItem, PaginationLink } from "@/components/ui/pagination";
 
 // Mock data for the forum topic
 const mockTopic = {
@@ -204,6 +207,11 @@ const ForumTopicPage: React.FC = () => {
   const [replyContent, setReplyContent] = useState("");
   const [likes, setLikes] = useState(mockTopic.likes);
   const [hasLiked, setHasLiked] = useState(false);
+  const [replies, setReplies] = useState(mockTopic.replies);
+  const [visibleReplies, setVisibleReplies] = useState(3);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const replyRef = useRef<HTMLTextAreaElement>(null);
+  const { toast } = useToast();
   
   const handleLike = () => {
     if (hasLiked) {
@@ -217,10 +225,56 @@ const ForumTopicPage: React.FC = () => {
   
   const handleReplySubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // In a real app, we would send the reply to the API
-    alert("Votre réponse a été publiée !");
-    setReplyContent("");
+    setIsSubmitting(true);
+    
+    // Simulate API call with a timeout
+    setTimeout(() => {
+      const newReply = {
+        id: `r${replies.length + 1}`,
+        content: replyContent,
+        user: {
+          name: "Vous",
+          avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&h=150&q=80",
+          role: "Étudiant",
+        },
+        createdAt: "à l'instant",
+        likes: 0,
+      };
+      
+      setReplies([...replies, newReply]);
+      setVisibleReplies(replies.length + 1); // Show all replies including the new one
+      setReplyContent("");
+      setIsSubmitting(false);
+      
+      toast({
+        title: "Réponse publiée",
+        description: "Votre réponse a été publiée avec succès.",
+      });
+      
+      // Scroll to the new reply
+      window.scrollTo({
+        top: document.body.scrollHeight,
+        behavior: "smooth",
+      });
+    }, 1000);
   };
+  
+  const handleLoadMore = () => {
+    setVisibleReplies(replies.length);
+  };
+  
+  const handleReplyToComment = (replyId: string) => {
+    // Scroll to reply form and focus on textarea
+    replyRef.current?.focus();
+    
+    // Add a mention to the selected comment's author
+    const targetReply = replies.find(reply => reply.id === replyId);
+    if (targetReply) {
+      setReplyContent(`@${targetReply.user.name}: `);
+    }
+  };
+  
+  const displayedReplies = replies.slice(0, visibleReplies);
   
   return (
     <>
@@ -291,13 +345,16 @@ const ForumTopicPage: React.FC = () => {
             </div>
             
             <div className="mb-6">
-              <h2 className="text-xl font-semibold mb-4">
-                Réponses ({mockTopic.replies.length})
+              <h2 className="text-xl font-semibold mb-4 flex items-center">
+                <span className="mr-2">Réponses</span>
+                <Badge variant="outline" className="text-xs font-normal">
+                  {replies.length}
+                </Badge>
               </h2>
               
               <div className="space-y-6">
-                {mockTopic.replies.map((reply) => (
-                  <div key={reply.id} className="bg-white rounded-lg border shadow-sm p-6">
+                {displayedReplies.map((reply) => (
+                  <div key={reply.id} className="bg-white rounded-lg border shadow-sm p-6 animate-fade-in">
                     <div className="flex justify-between items-start mb-4">
                       <div className="flex items-center gap-3">
                         <img
@@ -318,9 +375,13 @@ const ForumTopicPage: React.FC = () => {
                     </div>
                     
                     <div className="prose max-w-none mb-4">
-                      {reply.content.split("\n\n").map((paragraph, index) => (
-                        <p key={index}>{paragraph}</p>
-                      ))}
+                      {typeof reply.content === 'string' ? (
+                        reply.content.split("\n\n").map((paragraph, index) => (
+                          <p key={index}>{paragraph}</p>
+                        ))
+                      ) : (
+                        <div dangerouslySetInnerHTML={{ __html: reply.content }} />
+                      )}
                     </div>
                     
                     <div className="flex items-center gap-4">
@@ -329,7 +390,12 @@ const ForumTopicPage: React.FC = () => {
                         <span>{reply.likes}</span>
                       </Button>
                       
-                      <Button variant="ghost" size="sm" className="gap-1">
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        className="gap-1"
+                        onClick={() => handleReplyToComment(reply.id)}
+                      >
                         <MessageSquare className="h-4 w-4" />
                         <span>Répondre</span>
                       </Button>
@@ -337,6 +403,37 @@ const ForumTopicPage: React.FC = () => {
                   </div>
                 ))}
               </div>
+              
+              {replies.length > visibleReplies && (
+                <div className="mt-6 text-center">
+                  <Button 
+                    variant="outline" 
+                    onClick={handleLoadMore} 
+                    className="gap-2"
+                  >
+                    <span>Voir plus de réponses</span>
+                    <ChevronDown className="h-4 w-4" />
+                  </Button>
+                </div>
+              )}
+              
+              {replies.length > 5 && (
+                <div className="mt-6">
+                  <Pagination>
+                    <PaginationContent>
+                      <PaginationItem>
+                        <PaginationLink href="#">1</PaginationLink>
+                      </PaginationItem>
+                      <PaginationItem>
+                        <PaginationLink href="#" isActive>2</PaginationLink>
+                      </PaginationItem>
+                      <PaginationItem>
+                        <PaginationLink href="#">3</PaginationLink>
+                      </PaginationItem>
+                    </PaginationContent>
+                  </Pagination>
+                </div>
+              )}
             </div>
             
             <div className="bg-white rounded-lg border shadow-sm p-6">
@@ -348,11 +445,21 @@ const ForumTopicPage: React.FC = () => {
                   className="min-h-[200px] mb-4"
                   value={replyContent}
                   onChange={(e) => setReplyContent(e.target.value)}
+                  ref={replyRef}
                 />
                 
                 <div className="flex justify-end">
-                  <Button type="submit" disabled={!replyContent.trim()}>
-                    Publier la réponse
+                  <Button 
+                    type="submit" 
+                    disabled={!replyContent.trim() || isSubmitting}
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <span className="animate-pulse">Publication en cours...</span>
+                      </>
+                    ) : (
+                      "Publier la réponse"
+                    )}
                   </Button>
                 </div>
               </form>
@@ -360,7 +467,7 @@ const ForumTopicPage: React.FC = () => {
           </div>
           
           <div>
-            <div className="bg-white rounded-lg border shadow-sm p-6 mb-6">
+            <div className="bg-white rounded-lg border shadow-sm p-6 mb-6 sticky top-4">
               <div className="flex flex-col items-center text-center">
                 <img
                   src={mockTopic.user.avatar}
@@ -398,7 +505,7 @@ const ForumTopicPage: React.FC = () => {
                 
                 <div className="flex justify-between">
                   <span className="text-gray-600">Réponses</span>
-                  <span className="font-medium">{mockTopic.replies.length}</span>
+                  <span className="font-medium">{replies.length}</span>
                 </div>
                 
                 <div className="flex justify-between">
