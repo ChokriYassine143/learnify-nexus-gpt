@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -8,9 +8,71 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Book, UserPlus } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import { useAuth } from "@/contexts/AuthContext";
+import { useToast } from "@/hooks/use-toast";
 
 const Register: React.FC = () => {
-  const [role, setRole] = useState<string>("student");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [role, setRole] = useState<"student" | "teacher">("student");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  
+  const { register } = useAuth();
+  const { toast } = useToast();
+  const navigate = useNavigate();
+  
+  const validateForm = () => {
+    const newErrors: { [key: string]: string } = {};
+    
+    if (!firstName.trim()) newErrors.firstName = "First name is required";
+    if (!lastName.trim()) newErrors.lastName = "Last name is required";
+    
+    if (!email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      newErrors.email = "Email is invalid";
+    }
+    
+    if (!password) {
+      newErrors.password = "Password is required";
+    } else if (password.length < 6) {
+      newErrors.password = "Password must be at least 6 characters";
+    }
+    
+    if (password !== confirmPassword) {
+      newErrors.confirmPassword = "Passwords do not match";
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+  
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!validateForm()) return;
+    
+    setIsSubmitting(true);
+    
+    try {
+      await register({
+        firstName,
+        lastName,
+        email,
+        password,
+        role
+      });
+      
+      navigate("/dashboard");
+    } catch (error) {
+      // Error is already handled in the AuthContext
+      setIsSubmitting(false);
+    }
+  };
   
   return (
     <>
@@ -27,23 +89,33 @@ const Register: React.FC = () => {
             </p>
           </div>
           
-          <div className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="firstName">First Name</Label>
                 <Input
                   id="firstName"
                   placeholder="John"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
                   required
                 />
+                {errors.firstName && (
+                  <p className="text-sm text-red-500">{errors.firstName}</p>
+                )}
               </div>
               <div className="space-y-2">
                 <Label htmlFor="lastName">Last Name</Label>
                 <Input
                   id="lastName"
                   placeholder="Doe"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
                   required
                 />
+                {errors.lastName && (
+                  <p className="text-sm text-red-500">{errors.lastName}</p>
+                )}
               </div>
             </div>
             
@@ -53,8 +125,13 @@ const Register: React.FC = () => {
                 id="email"
                 placeholder="email@example.com"
                 type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 required
               />
+              {errors.email && (
+                <p className="text-sm text-red-500">{errors.email}</p>
+              )}
             </div>
             
             <div className="space-y-2">
@@ -63,8 +140,13 @@ const Register: React.FC = () => {
                 id="password"
                 type="password"
                 placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 required
               />
+              {errors.password && (
+                <p className="text-sm text-red-500">{errors.password}</p>
+              )}
             </div>
             
             <div className="space-y-2">
@@ -73,8 +155,13 @@ const Register: React.FC = () => {
                 id="confirmPassword"
                 type="password"
                 placeholder="••••••••"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
                 required
               />
+              {errors.confirmPassword && (
+                <p className="text-sm text-red-500">{errors.confirmPassword}</p>
+              )}
             </div>
             
             <div className="space-y-2">
@@ -82,7 +169,7 @@ const Register: React.FC = () => {
               <RadioGroup 
                 defaultValue="student"
                 value={role}
-                onValueChange={setRole}
+                onValueChange={(value) => setRole(value as "student" | "teacher")}
                 className="flex space-x-4"
               >
                 <div className="flex items-center space-x-2">
@@ -96,10 +183,11 @@ const Register: React.FC = () => {
               </RadioGroup>
             </div>
             
-            <Button type="submit" className="w-full">
-              <UserPlus className="mr-2 h-4 w-4" /> Register
+            <Button type="submit" className="w-full" disabled={isSubmitting}>
+              <UserPlus className="mr-2 h-4 w-4" />
+              {isSubmitting ? "Registering..." : "Register"}
             </Button>
-          </div>
+          </form>
           
           <div className="text-center">
             <p className="text-sm text-gray-600">

@@ -32,6 +32,7 @@ const Login: React.FC = () => {
     
     try {
       const userData = await login(email, password);
+      
       // After successful login, redirect based on user role
       let targetUrl = redirectUrl;
       

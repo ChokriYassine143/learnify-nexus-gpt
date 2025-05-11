@@ -1,14 +1,7 @@
 
 import React, { createContext, useState, useContext, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
-
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  role: "student" | "teacher" | "admin";
-  hasPurchasedCourses?: boolean; 
-}
+import { localStorageService, User } from "@/services/localStorageService";
 
 interface AuthContextType {
   user: User | null;
@@ -16,7 +9,14 @@ interface AuthContextType {
   isLoading: boolean;
   login: (email: string, password: string) => Promise<User>;
   logout: () => void;
-  register: (name: string, email: string, password: string) => Promise<void>;
+  register: (userData: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+    role: "student" | "teacher" | "admin";
+  }) => Promise<void>;
+  updateProfile: (userData: Partial<User>) => Promise<User>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -37,13 +37,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Check for existing session on mount
   useEffect(() => {
     const checkAuth = async () => {
-      // In a real app, this would check a token in localStorage and validate with the backend
-      const storedUser = localStorage.getItem("user");
+      const storedUser = localStorage.getItem("currentUser");
       if (storedUser) {
         try {
           setUser(JSON.parse(storedUser));
         } catch (error) {
-          localStorage.removeItem("user");
+          localStorage.removeItem("currentUser");
         }
       }
       setIsLoading(false);
@@ -52,44 +51,33 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     checkAuth();
   }, []);
   
-  const login = async (email: string, password: string) => {
+  const login = async (email: string, password: string): Promise<User> => {
     setIsLoading(true);
     
     try {
-      // This is a mock implementation. In a real app, you would call your API
-      // For demo purposes, we'll accept any login with valid format
-      if (!email.includes('@') || password.length < 6) {
-        throw new Error("Invalid email or password");
+      // In a real app, we would validate the password too
+      // For demo purposes, we'll just find the user by email
+      const foundUser = localStorageService.getUserByEmail(email);
+      
+      if (!foundUser) {
+        throw new Error("User not found");
       }
       
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Determine role based on email prefix for demonstration
-      let role: "student" | "teacher" | "admin" = "student";
-      if (email.startsWith("teacher")) {
-        role = "teacher";
-      } else if (email.startsWith("admin")) {
-        role = "admin";
+      // Check if user is disabled
+      if (foundUser.isDisabled) {
+        throw new Error("Your account has been disabled. Please contact support.");
       }
       
-      const loggedInUser = {
-        id: `user-${Math.random().toString(36).substr(2, 9)}`,
-        name: email.split("@")[0],
-        email,
-        role,
-      };
-      
-      // Store user in localStorage
-      localStorage.setItem("user", JSON.stringify(loggedInUser));
-      setUser(loggedInUser);
+      // Store current user in localStorage
+      localStorage.setItem("currentUser", JSON.stringify(foundUser));
+      setUser(foundUser);
       
       toast({
         title: "Logged in successfully",
-        description: `Welcome back, ${loggedInUser.name}!`,
+        description: `Welcome back, ${foundUser.name}!`,
       });
       
-      return loggedInUser;
+      return foundUser;
       
     } catch (error) {
       toast({
@@ -104,7 +92,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
   
   const logout = () => {
-    localStorage.removeItem("user");
+    localStorage.removeItem("currentUser");
     setUser(null);
     toast({
       title: "Logged out",
@@ -112,32 +100,40 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     });
   };
   
-  const register = async (name: string, email: string, password: string) => {
+  const register = async ({ firstName, lastName, email, password, role }: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+    role: "student" | "teacher" | "admin";
+  }) => {
     setIsLoading(true);
     
     try {
-      // This is a mock implementation. In a real app, you would call your API
-      if (!email.includes('@') || password.length < 6 || name.length < 2) {
-        throw new Error("Invalid registration details");
+      // Check if user already exists
+      const existingUser = localStorageService.getUserByEmail(email);
+      if (existingUser) {
+        throw new Error("Email already in use");
       }
       
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      const newUser = {
+      // Create new user
+      const newUser: User = {
         id: `user-${Math.random().toString(36).substr(2, 9)}`,
-        name,
+        name: `${firstName} ${lastName}`,
         email,
-        role: "student" as const,
+        role,
       };
       
-      // Store user in localStorage
-      localStorage.setItem("user", JSON.stringify(newUser));
+      // Add user to localStorage
+      localStorageService.addUser(newUser);
+      
+      // Auto login after registration
+      localStorage.setItem("currentUser", JSON.stringify(newUser));
       setUser(newUser);
       
       toast({
         title: "Registration successful",
-        description: `Welcome to LearnifyNexus, ${name}!`,
+        description: `Welcome to LearnUp, ${firstName}!`,
       });
       
     } catch (error) {
@@ -152,6 +148,35 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
   
+  const updateProfile = async (userData: Partial<User>): Promise<User> => {
+    if (!user) throw new Error("Not authenticated");
+    
+    try {
+      const updatedUser = { ...user, ...userData };
+      
+      // Update user in localStorage
+      localStorageService.updateUser(updatedUser);
+      
+      // Update current user
+      localStorage.setItem("currentUser", JSON.stringify(updatedUser));
+      setUser(updatedUser);
+      
+      toast({
+        title: "Profile updated",
+        description: "Your profile has been updated successfully",
+      });
+      
+      return updatedUser;
+    } catch (error) {
+      toast({
+        title: "Failed to update profile",
+        description: error instanceof Error ? error.message : "Something went wrong",
+        variant: "destructive",
+      });
+      throw error;
+    }
+  };
+  
   return (
     <AuthContext.Provider
       value={{
@@ -161,6 +186,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         login,
         logout,
         register,
+        updateProfile
       }}
     >
       {children}
