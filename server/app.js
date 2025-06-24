@@ -7,7 +7,78 @@ const path = require('path');
 const app = express();
 
 // Middleware
-app.use(cors());
+To change app.use(cors()); in your Node.js/Express application hosted at https://learnup-x1t1.onrender.com, you likely want to configure CORS (Cross-Origin Resource Sharing) more specifically to restrict or allow certain origins, methods, or headers, rather than enabling it for all requests (which is what app.use(cors()); does by default).
+
+Here’s how you can modify it:
+
+Install CORS (if not already installed):
+
+bash
+
+Collapse
+
+Wrap
+
+Run
+
+Copy
+npm install cors
+Basic CORS Usage (Current Setup):
+
+javascript
+
+Collapse
+
+Wrap
+
+Run
+
+Copy
+const express = require("express");
+const cors = require("cors");
+const app = express();
+
+app.use(cors()); // Allows all origins, methods, and headers
+Modify CORS Configuration:
+If you want to restrict CORS to specific origins (e.g., only allow requests from a specific frontend domain) or customize it, update the code like this:
+
+javascript
+
+Collapse
+
+Wrap
+
+Run
+
+Copy
+const express = require("express");
+const cors = require("cors");
+const app = express();
+
+// Example: Restrict CORS to a specific origin
+const corsOptions = {
+  origin: "https://your-frontend-domain.com", // Replace with your frontend URL
+  methods: ["GET", "POST"], // Allowed methods
+  allowedHeaders: ["Content-Type", "Authorization"], // Allowed headers
+  credentials: true // Allow cookies or auth headers if needed
+};
+
+app.use(cors(corsOptions)); // Use custom CORS settings
+
+// OR allow multiple origins dynamically
+const allowedOrigins = ["https://frontend1.com", "https://localhost:3000"];
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  methods: ["GET", "POST"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true
+}));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
