@@ -8,9 +8,6 @@ const app = express();
 
 // Middleware
 
-const express = require("express");
-const cors = require("cors");
-const app = express();
 
 // Example: Restrict CORS to a specific origin
 const corsOptions = {
