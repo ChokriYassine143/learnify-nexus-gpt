@@ -11,7 +11,7 @@ const app = express();
 
 // Example: Restrict CORS to a specific origin
 const corsOptions = {
-  origin: "https://learnup-x1t1.onrender.com", // Replace with your frontend URL
+  origin: "https://learnup-x1t1.onrender.com/", // Replace with your frontend URL
   methods: ["GET", "POST","DELETE","PUT"], // Allowed methods
   allowedHeaders: ["Content-Type", "Authorization"], // Allowed headers
   credentials: true // Allow cookies or auth headers if needed
@@ -20,7 +20,7 @@ const corsOptions = {
 app.use(cors(corsOptions)); // Use custom CORS settings
 
 // OR allow multiple origins dynamically
-const allowedOrigins = ["https://frontend1.com", "https://localhost:3000"];
+const allowedOrigins = ["https://learnup-x1t1.onrender.com/, "https://localhost:3000"];
 app.use(cors({
   origin: (origin, callback) => {
     if (!origin || allowedOrigins.includes(origin)) {
