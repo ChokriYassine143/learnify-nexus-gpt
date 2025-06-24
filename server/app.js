@@ -7,58 +7,15 @@ const path = require('path');
 const app = express();
 
 // Middleware
-To change app.use(cors()); in your Node.js/Express application hosted at https://learnup-x1t1.onrender.com, you likely want to configure CORS (Cross-Origin Resource Sharing) more specifically to restrict or allow certain origins, methods, or headers, rather than enabling it for all requests (which is what app.use(cors()); does by default).
 
-Here’s how you can modify it:
-
-Install CORS (if not already installed):
-
-bash
-
-Collapse
-
-Wrap
-
-Run
-
-Copy
-npm install cors
-Basic CORS Usage (Current Setup):
-
-javascript
-
-Collapse
-
-Wrap
-
-Run
-
-Copy
-const express = require("express");
-const cors = require("cors");
-const app = express();
-
-app.use(cors()); // Allows all origins, methods, and headers
-Modify CORS Configuration:
-If you want to restrict CORS to specific origins (e.g., only allow requests from a specific frontend domain) or customize it, update the code like this:
-
-javascript
-
-Collapse
-
-Wrap
-
-Run
-
-Copy
 const express = require("express");
 const cors = require("cors");
 const app = express();
 
 // Example: Restrict CORS to a specific origin
 const corsOptions = {
-  origin: "https://your-frontend-domain.com", // Replace with your frontend URL
-  methods: ["GET", "POST"], // Allowed methods
+  origin: "https://learnup-x1t1.onrender.com", // Replace with your frontend URL
+  methods: ["GET", "POST","DELETE","PUT"], // Allowed methods
   allowedHeaders: ["Content-Type", "Authorization"], // Allowed headers
   credentials: true // Allow cookies or auth headers if needed
 };
