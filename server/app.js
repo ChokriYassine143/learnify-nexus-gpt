@@ -20,7 +20,7 @@ const corsOptions = {
 app.use(cors(corsOptions)); // Use custom CORS settings
 
 // OR allow multiple origins dynamically
-const allowedOrigins = ["https://learnup-x1t1.onrender.com/, "https://localhost:3000"];
+const allowedOrigins = ["https://learnup-x1t1.onrender.com/", "https://localhost:3000"];
 app.use(cors({
   origin: (origin, callback) => {
     if (!origin || allowedOrigins.includes(origin)) {
